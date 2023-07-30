@@ -172,7 +172,7 @@ const Crud = () => {
             <React.Fragment>
                 <div className="my-2">
                     <Button label="New" icon="pi pi-plus" severity="sucess" className="mr-2" onClick={openNew} />
-                    <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                    {/* <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} /> */}
                 </div>
             </React.Fragment>
         );
@@ -181,8 +181,20 @@ const Crud = () => {
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-                <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="mr-2 inline-block" />
-                <Button label="Export" icon="pi pi-upload" severity="help" onClick={exportCSV} />
+                {/* <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="mr-2 inline-block" /> */}
+                <Button
+                    label="Add Patient"
+                    icon="pi pi-plus"
+                    severity="sucess"
+                    className="mr-2"
+                    onClick={openNew}
+                />
+                <Button
+                    label="Download list"
+                    icon="pi pi-download"
+                    severity="help"
+                    onClick={exportCSV}
+                />
             </React.Fragment>
         );
     };
@@ -261,7 +273,7 @@ const Crud = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">Manage Products</h5>
+            <h2 className="m-0">Patient List</h2>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -293,7 +305,11 @@ const Crud = () => {
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
-                    <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                    {/* <Toolbar
+                        className="mb-4"
+                        left={leftToolbarTemplate}
+                        right={rightToolbarTemplate}
+                    ></Toolbar> */}
 
                     <DataTable
                         ref={dt}
@@ -312,46 +328,151 @@ const Crud = () => {
                         header={header}
                         responsiveLayout="scroll"
                     >
-                        <Column selectionMode="multiple" headerStyle={{ width: '4rem' }}></Column>
-                        <Column field="code" header="Code" sortable body={codeBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column field="name" header="Name" sortable body={nameBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column>
-                        <Column header="Image" body={imageBodyTemplate}></Column>
-                        <Column field="price" header="Price" body={priceBodyTemplate} sortable></Column>
-                        <Column field="category" header="Category" sortable body={categoryBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
-                        <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable></Column>
-                        <Column field="inventoryStatus" header="Status" body={statusBodyTemplate} sortable headerStyle={{ minWidth: '10rem' }}></Column>
-                        <Column body={actionBodyTemplate} headerStyle={{ minWidth: '10rem' }}></Column>
+                        <Column
+                            selectionMode="multiple"
+                            headerStyle={{ width: "4rem" }}
+                        ></Column>
+                        {/* <Column field="code" header="Code" sortable body={codeBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column> */}
+                        <Column
+                            field="name"
+                            header="Name"
+                            sortable
+                            body={nameBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
+                        ></Column>
+                        {/* <Column header="Image" body={imageBodyTemplate}></Column> */}
+                        <Column
+                            field="price"
+                            header="Price"
+                            body={priceBodyTemplate}
+                            sortable
+                        ></Column>
+                        <Column
+                            field="category"
+                            header="Category"
+                            sortable
+                            body={categoryBodyTemplate}
+                            headerStyle={{ minWidth: "10rem" }}
+                        ></Column>
+                        <Column
+                            field="rating"
+                            header="Reviews"
+                            body={ratingBodyTemplate}
+                            sortable
+                        ></Column>
+                        <Column
+                            field="inventoryStatus"
+                            header="Status"
+                            body={statusBodyTemplate}
+                            sortable
+                            headerStyle={{ minWidth: "10rem" }}
+                        ></Column>
+                        <Column
+                            body={actionBodyTemplate}
+                            headerStyle={{ minWidth: "10rem" }}
+                        ></Column>
                     </DataTable>
 
-                    <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                        {product.image && <img src={`/demo/images/product/${product.image}`} alt={product.image} width="150" className="mt-0 mx-auto mb-5 block shadow-2" />}
+                    <Dialog
+                        visible={productDialog}
+                        style={{ width: "450px" }}
+                        header="Product Details"
+                        modal
+                        className="p-fluid"
+                        footer={productDialogFooter}
+                        onHide={hideDialog}
+                    >
+                        {product.image && (
+                            <img
+                                src={`/demo/images/product/${product.image}`}
+                                alt={product.image}
+                                width="150"
+                                className="mt-0 mx-auto mb-5 block shadow-2"
+                            />
+                        )}
                         <div className="field">
                             <label htmlFor="name">Name</label>
-                            <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                            {submitted && !product.name && <small className="p-invalid">Name is required.</small>}
+                            <InputText
+                                id="name"
+                                value={product.name}
+                                onChange={(e) => onInputChange(e, "name")}
+                                required
+                                autoFocus
+                                className={classNames({
+                                    "p-invalid": submitted && !product.name,
+                                })}
+                            />
+                            {submitted && !product.name && (
+                                <small className="p-invalid">
+                                    Name is required.
+                                </small>
+                            )}
                         </div>
                         <div className="field">
                             <label htmlFor="description">Description</label>
-                            <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
+                            <InputTextarea
+                                id="description"
+                                value={product.description}
+                                onChange={(e) =>
+                                    onInputChange(e, "description")
+                                }
+                                required
+                                rows={3}
+                                cols={20}
+                            />
                         </div>
 
                         <div className="field">
                             <label className="mb-3">Category</label>
                             <div className="formgrid grid">
                                 <div className="field-radiobutton col-6">
-                                    <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                                    <label htmlFor="category1">Accessories</label>
+                                    <RadioButton
+                                        inputId="category1"
+                                        name="category"
+                                        value="Accessories"
+                                        onChange={onCategoryChange}
+                                        checked={
+                                            product.category === "Accessories"
+                                        }
+                                    />
+                                    <label htmlFor="category1">
+                                        Accessories
+                                    </label>
                                 </div>
                                 <div className="field-radiobutton col-6">
-                                    <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
+                                    <RadioButton
+                                        inputId="category2"
+                                        name="category"
+                                        value="Clothing"
+                                        onChange={onCategoryChange}
+                                        checked={
+                                            product.category === "Clothing"
+                                        }
+                                    />
                                     <label htmlFor="category2">Clothing</label>
                                 </div>
                                 <div className="field-radiobutton col-6">
-                                    <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                                    <label htmlFor="category3">Electronics</label>
+                                    <RadioButton
+                                        inputId="category3"
+                                        name="category"
+                                        value="Electronics"
+                                        onChange={onCategoryChange}
+                                        checked={
+                                            product.category === "Electronics"
+                                        }
+                                    />
+                                    <label htmlFor="category3">
+                                        Electronics
+                                    </label>
                                 </div>
                                 <div className="field-radiobutton col-6">
-                                    <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
+                                    <RadioButton
+                                        inputId="category4"
+                                        name="category"
+                                        value="Fitness"
+                                        onChange={onCategoryChange}
+                                        checked={product.category === "Fitness"}
+                                    />
                                     <label htmlFor="category4">Fitness</label>
                                 </div>
                             </div>
@@ -360,32 +481,78 @@ const Crud = () => {
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="price">Price</label>
-                                <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
+                                <InputNumber
+                                    id="price"
+                                    value={product.price}
+                                    onValueChange={(e) =>
+                                        onInputNumberChange(e, "price")
+                                    }
+                                    mode="currency"
+                                    currency="USD"
+                                    locale="en-US"
+                                />
                             </div>
                             <div className="field col">
                                 <label htmlFor="quantity">Quantity</label>
-                                <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} integeronly="true" />
+                                <InputNumber
+                                    id="quantity"
+                                    value={product.quantity}
+                                    onValueChange={(e) =>
+                                        onInputNumberChange(e, "quantity")
+                                    }
+                                    integeronly="true"
+                                />
                             </div>
                         </div>
                     </Dialog>
 
-                    <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+                    <Dialog
+                        visible={deleteProductDialog}
+                        style={{ width: "450px" }}
+                        header="Confirm"
+                        modal
+                        footer={deleteProductDialogFooter}
+                        onHide={hideDeleteProductDialog}
+                    >
                         <div className="flex align-items-center justify-content-center">
-                            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                            <i
+                                className="pi pi-exclamation-triangle mr-3"
+                                style={{ fontSize: "2rem" }}
+                            />
                             {product && (
                                 <span>
-                                    Are you sure you want to delete <b>{product.name}</b>?
+                                    Are you sure you want to delete{" "}
+                                    <b>{product.name}</b>?
                                 </span>
                             )}
                         </div>
                     </Dialog>
 
-                    <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+                    <Dialog
+                        visible={deleteProductsDialog}
+                        style={{ width: "450px" }}
+                        header="Confirm"
+                        modal
+                        footer={deleteProductsDialogFooter}
+                        onHide={hideDeleteProductsDialog}
+                    >
                         <div className="flex align-items-center justify-content-center">
-                            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                            {product && <span>Are you sure you want to delete the selected products?</span>}
+                            <i
+                                className="pi pi-exclamation-triangle mr-3"
+                                style={{ fontSize: "2rem" }}
+                            />
+                            {product && (
+                                <span>
+                                    Are you sure you want to delete the selected
+                                    products?
+                                </span>
+                            )}
                         </div>
                     </Dialog>
+                    <Toolbar
+                        className="mb-4"
+                        left={rightToolbarTemplate}
+                    ></Toolbar>
                 </div>
             </div>
         </div>
