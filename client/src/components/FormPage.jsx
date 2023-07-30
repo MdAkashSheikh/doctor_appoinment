@@ -5,12 +5,13 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import DatePicker from "react-datepicker";
+import { formatDistance, subDays } from 'date-fns';
 
 function FormPage() {
     const [chamber, setChamber] = useState('');
     const [specialization, setSpecialization] = useState('');
     const [doctor, setDoctor] = useState('');
-    const [date1, setDate1] = useState('');
+    const [startDate, setStartDate] = useState(null);
     const [time1, setTime1] = useState('');
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
@@ -63,12 +64,10 @@ function FormPage() {
                             <Form.Group as={Col} controlId="date1">
                             <Form.Label>Age</Form.Label>
                             <DatePicker
-                                selected={date1}
-                                onChange={(date) => setDate1(date)}
-                                includeDateIntervals={[
-                                    { start: (new Date(), 1), end: (new Date(), 365) },
-                                ]}
-                                placeholderText="This only includes dates from 5 days ago to 5 days in the future"
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                minDate={subDays(new Date(), 0)}
+                                placeholderText="Select a date"
                             />
 
                             </Form.Group>
