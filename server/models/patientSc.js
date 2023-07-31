@@ -7,13 +7,13 @@ const patientSc = new mongoose.Schema({
     specialist: {
         type: String,
     },
-    dr_name: {
+    doctor: {
         type: String,
     },
-    s_date: {
+    date1: {
         type: Date,
     },
-    s_time: {
+    time1: {
         type: String,
     },
     name: {
