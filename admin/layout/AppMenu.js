@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import AppMenuitem from './AppMenuitem';
 import { LayoutContext } from './context/layoutcontext';
 import { MenuProvider } from './context/menucontext';
-import Link from 'next/link';
 
 const AppMenu = () => {
     const { layoutConfig } = useContext(LayoutContext);
@@ -16,34 +15,30 @@ const AppMenu = () => {
             label: "Admin",
             items: [
                 {
-                    label: "Patient List",
+                    label: "Appointment List",
                     icon: "pi pi-fw pi-bookmark",
-                    to: "/pages/crud",             //CRUD PAGE
+                    to: "/pages/appointment-list",
                 },
                 {
-                    label: "Demo2",
+                    label: "Time Management",
                     icon: "pi pi-fw pi-bookmark",
-                    to: "/"
                 },
-                // {
-                //     label: 'Submenu 2',
-                //     icon: 'pi pi-fw pi-bookmark',
-                //     items: [
-                //         {
-                //             label: 'Submenu 2.1',
-                //             icon: 'pi pi-fw pi-bookmark',
-                //             items: [
-                //                 { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                //                 { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                //             ]
-                //         },
-                //         {
-                //             label: 'Submenu 2.2',
-                //             icon: 'pi pi-fw pi-bookmark',
-                //             items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                //         }
-                //     ]
-                // }
+                {
+                    label: "Chamber Menagement",
+                    icon: "pi pi-fw pi-bookmark",
+                },
+                {
+                    label: "Availability Management",
+                    icon: "pi pi-fw pi-bookmark",
+                },
+                {
+                    label: "General Setting",
+                    icon: "pi pi-fw pi-bookmark",
+                },
+                {
+                    label: "SMS Templates",
+                    icon: "pi pi-fw pi-bookmark",
+                },
             ],
         },
         {
@@ -72,25 +67,10 @@ const AppMenu = () => {
                         },
                     ],
                 },
-                // {
-                //     label: "Crud",
-                //     icon: "pi pi-fw pi-pencil",
-                //     to: "/pages/crud",
-                // },
-                {
-                    label: "Timeline",
-                    icon: "pi pi-fw pi-calendar",
-                    to: "/pages/timeline",
-                },
                 {
                     label: "Not Found",
                     icon: "pi pi-fw pi-exclamation-circle",
                     to: "/pages/notfound",
-                },
-                {
-                    label: "Empty",
-                    icon: "pi pi-fw pi-circle-off",
-                    to: "/pages/empty",
                 },
             ],
         },

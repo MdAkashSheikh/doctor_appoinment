@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
+import { Button } from 'primereact/button';
 import React from 'react';
 import AppConfig from '../../../layout/AppConfig';
-import { Button } from 'primereact/button';
 
 const AccessDeniedPage = () => {
     const router = useRouter();

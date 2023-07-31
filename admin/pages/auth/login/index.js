@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
+import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
+import { classNames } from 'primereact/utils';
 import React, { useContext, useState } from 'react';
 import AppConfig from '../../../layout/AppConfig';
-import { Checkbox } from 'primereact/checkbox';
-import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
 import { LayoutContext } from '../../../layout/context/layoutcontext';
-import { InputText } from 'primereact/inputtext';
-import { classNames } from 'primereact/utils';
 
 const LoginPage = () => {
     const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const LoginPage = () => {
                     <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '53px' }}>
                         <div className="text-center mb-5">
                             <img src="/demo/images/login/avatar.png" alt="Image" height="50" className="mb-3" />
-                            <div className="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
+                            <div className="text-900 text-3xl font-medium mb-3">Welcome, Nitto</div>
                             <span className="text-600 font-medium">Sign in to continue</span>
                         </div>
 

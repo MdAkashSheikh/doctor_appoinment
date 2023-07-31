@@ -2,7 +2,6 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
-import { FileUpload } from 'primereact/fileupload';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -14,7 +13,7 @@ import { classNames } from 'primereact/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
-const Crud = () => {
+const Appointment = () => {
     let emptyProduct = {
         id: null,
         name: '',
@@ -24,7 +23,7 @@ const Crud = () => {
         price: 0,
         quantity: 0,
         rating: 0,
-        inventoryStatus: 'INSTOCK'
+        inventoryStatus: 'Success'
     };
 
     const [products, setProducts] = useState(null);
@@ -266,7 +265,7 @@ const Crud = () => {
         return (
             <>
                 <Button icon="pi pi-pencil" severity="success" rounded className="mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" severity="warning" rounded onClick={() => confirmDeleteProduct(rowData)} />
+                {/* <Button icon="pi pi-trash" severity="warning" rounded onClick={() => confirmDeleteProduct(rowData)} /> */}
             </>
         );
     };
@@ -319,18 +318,18 @@ const Crud = () => {
                         dataKey="id"
                         paginator
                         rows={10}
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[5, 10, 25, 50]}
                         className="datatable-responsive"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="No products found."
+                        emptyMessage="Not found."
                         header={header}
                         responsiveLayout="scroll"
                     >
                         <Column
                             selectionMode="multiple"
-                            headerStyle={{ width: "4rem" }}
+                            headerStyle={{ width: "2rem" }}
                         ></Column>
                         {/* <Column field="code" header="Code" sortable body={codeBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column> */}
                         <Column
@@ -338,7 +337,7 @@ const Crud = () => {
                             header="Name"
                             sortable
                             body={nameBodyTemplate}
-                            headerStyle={{ minWidth: "15rem" }}
+                            headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                         {/* <Column header="Image" body={imageBodyTemplate}></Column> */}
                         <Column
@@ -365,11 +364,12 @@ const Crud = () => {
                             header="Status"
                             body={statusBodyTemplate}
                             sortable
-                            headerStyle={{ minWidth: "10rem" }}
+                            headerStyle={{ minWidth: "5rem" }}
                         ></Column>
                         <Column
+                            header="Action"
                             body={actionBodyTemplate}
-                            headerStyle={{ minWidth: "10rem" }}
+                            headerStyle={{ minWidth: "3rem" }}
                         ></Column>
                     </DataTable>
 
@@ -559,4 +559,4 @@ const Crud = () => {
     );
 };
 
-export default Crud;
+export default Appointment;
