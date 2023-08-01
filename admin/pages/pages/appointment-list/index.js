@@ -17,20 +17,21 @@ const Appointment = () => {
     let emptyProduct = {
         id: null,
         sl: 0,
-        appointmentDate:'',
+        date1:'',
         doctor: '',
         specialist: '',
         serialNumber:0,
         name: '',
         phone:'',
-        sex:'',
-        time:'',
+        age: '',
+        gender:'',
+        time1:'',
         chamber: '',
         image: null,
         category: null,
         price: 0,
-        problem: '',
-        inventoryStatus: 'Success'
+        details: '',
+        status: 'SUCCESS'
     };
 
     const [products, setProducts] = useState(null);
@@ -43,6 +44,8 @@ const Appointment = () => {
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
+    const [toggleRefresh, setTogleRefresh] = useState(false);
+
 
     useEffect(() => {
         ProductService.getProducts().then((data) => setProducts(data));
@@ -74,25 +77,24 @@ const Appointment = () => {
     const saveProduct = () => {
         setSubmitted(true);
 
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
-            if (product.id) {
-                const index = findIndexById(product.id);
+        console.log("PPPP1",product)
 
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                _product.id = createId();
-                _product.code = createId();
-                _product.image = 'product-placeholder.svg';
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
-
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
+        if(product.name && product.chamber && product.doctor && product.date1 && product.time1) {
+            ProductService.postProducts(
+                product.chamber,
+                product.specialist,
+                product.doctor,
+                product.date1,
+                product.time1,
+                product.name,
+                product.age,
+                product.gender,
+                product.phone,
+                product.details,
+            ).then(() => {
+                setTogleRefresh(!toggleRefresh);
+                setProductDialog(false);
+            })
         }
     };
 
@@ -268,7 +270,8 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Appointment Date</span>
-                {rowData.appointmentDate}
+                   {rowData.date1}
+                
             </>
         );
     }
@@ -313,7 +316,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Problem</span>
-                {rowData.problem}
+                {rowData.details}
             </>
         );
     }
@@ -331,7 +334,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Time</span>
-                {rowData.time}
+                {rowData.time1}
             </>
         );
     }
@@ -340,7 +343,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Sex</span>
-                {rowData.sex}
+                {rowData.gender}
             </>
         );
     }
@@ -350,7 +353,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Status</span>
-                <span className={`product-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>
+                <span className={`product-badge status-${rowData.status}`}>{rowData.status}</span>
             </>
         );
     };
@@ -419,7 +422,7 @@ const Appointment = () => {
                             sortable
                         ></Column>
                         <Column
-                            field="appointmentDate"
+                            field="date1"
                             header="Appointment Date"
                             sortable
                             body={appointDateBodyTemplete}
@@ -444,14 +447,14 @@ const Appointment = () => {
                             body={phoneBodyTemplate}
                         ></Column>
                         <Column
-                            field="sex"
+                            field="gender"
                             header="Sex"
                             sortable
                             body={sexBodyTemplate}
                             headerStyle={{ minWidth: "3rem" }}
                         ></Column>
                         <Column
-                            field="time"
+                            field="time1"
                             header="Time"
                             body={timeBodyTemplate}
                             headerStyle={{ minWidth: "3rem" }}
@@ -464,13 +467,13 @@ const Appointment = () => {
                             headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                         <Column
-                            field="problem"
+                            field="details"
                             header="Problem"
                             body={problemBodyTemplate}
                             headerStyle={{ minWidth: "5rem" }}
                         ></Column>
                         <Column
-                            field="inventoryStatus"
+                            field="status"
                             header="Status"
                             body={statusBodyTemplate}
                             sortable

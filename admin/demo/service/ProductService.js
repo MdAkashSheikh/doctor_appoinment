@@ -10,9 +10,9 @@ export const ProductService = {
     },
 
     getProducts() {
-        return fetch(`//localhost:5000/get-data`, { headers: { 'Cache-Control': 'no-cache' } })
+        return fetch(`${baseUrl}/get-data`, { headers: { 'Cache-Control': 'no-cache' } })
             .then((res) => res.json())
-            .then((d) => d.data);
+            .then((d) => d.AllData);
     },
 
     getProductsWithOrdersSmall() {

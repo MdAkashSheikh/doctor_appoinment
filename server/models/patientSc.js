@@ -11,7 +11,7 @@ const patientSc = new mongoose.Schema({
         type: String,
     },
     date1: {
-        type: Date,
+        type: String,
     },
     time1: {
         type: String,
@@ -20,19 +20,22 @@ const patientSc = new mongoose.Schema({
         type: String,
     },
     age: {
-        type: Number,
+        type: String,
     },
     gender: {
         type: String,
     },
     phone: {
-        type: Number
+        type: String
     },
     details: {
         type: String
     },
     serial: {
         type: Number,
+    },
+    status: {
+        type: String,
     },
     date: {
         type: Date,

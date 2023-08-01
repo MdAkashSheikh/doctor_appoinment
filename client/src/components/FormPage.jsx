@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { subDays } from 'date-fns';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -22,6 +22,19 @@ function FormPage() {
     const [gender, setGender] = useState('');
     const [phone, setPhone] = useState('');
     const [details, setDetails] = useState('');
+    const [status, setStattus] = useState('Not Updated')
+
+    
+    const refChamber = useRef("");
+    const refSpecialist = useRef("");
+    const refDoctor = useRef("");
+    const refDate = useRef("");
+    const refTime = useRef("");
+    const refName = useRef("");
+    const refAge = useRef("");
+    const refGender = useRef("");
+    const refPhone = useRef("");
+    const refDetails = useRef("");
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -49,7 +62,8 @@ function FormPage() {
                 age: age,
                 gender: gender,
                 phone: phone,
-                details,
+                details:details,
+                status:status,
             })
             
             console.log(result.data);
@@ -57,6 +71,17 @@ function FormPage() {
         } catch (err) {
             console.log(err);
         }
+
+        refChamber.current.value = "";
+        refSpecialist.current.value = "";
+        refDoctor.current.value = "";
+        refDate.current.value = "";
+        refTime.current.value = "";
+        refName.current.value = "";
+        refAge.current.value = "";
+        refGender.current.value = "";
+        refPhone.current.value = "";
+        refDetails.current.value = "";
     }
 
     return (
@@ -71,7 +96,9 @@ function FormPage() {
                             <Form.Label>Chamber</Form.Label>
                             <Form.Select 
                                 defaultValue="Choose..."
+                                ref={refChamber}
                                 onChange={e => setChamber(e.target.value)}
+                                value={chamber}
                             >
                                 <option>Choose...</option>
                                 <option>A</option>
@@ -86,7 +113,9 @@ function FormPage() {
                             <Form.Label>Select Specialization</Form.Label>
                             <Form.Select
                                  defaultValue="Choose..."
+                                 ref={refSpecialist}
                                  onChange={e => setSpecialist(e.target.value)}
+                                 value={specialist}
                             >
                                 <option>Choose...</option>
                                 <option>ENT</option>
@@ -99,7 +128,9 @@ function FormPage() {
                             <Form.Label>Doctor</Form.Label>
                             <Form.Select 
                                 defaultValue="Choose..."
+                                ref={refDoctor}
                                 onChange={e => setDoctor(e.target.value)}
+                                value={doctor}
                             >
                                 <option>Choose...</option>
                                 <option value="Dr. X">Dr. X</option>
@@ -126,7 +157,9 @@ function FormPage() {
                             <Form.Label>Select Time</Form.Label>
                             <Form.Select
                                 defaultValue="Choose..."
+                                ref={refTime}
                                 onChange={e => setTime1(e.target.value)}
+                                value={time1}
                             >
                                 <option>Choose...</option>
                                 <option value='9-12'> 9:00-12:00</option>
@@ -143,7 +176,9 @@ function FormPage() {
                             <Form.Control
                                 type="text"
                                 placeholder="Enter Your Name"
+                                ref={refName}
                                 onChange={e => setName(e.target.value)}
+                                value={name}
                             />
                             </Form.Group>
 
@@ -152,7 +187,9 @@ function FormPage() {
                             <Form.Control
                                 type="number"
                                 placeholder="Enter Your Age"
+                                ref={refAge}
                                 onChange={e => setAge(e.target.value)}
+                                value={age}
                             />
                             </Form.Group>
                         </Row>
@@ -162,7 +199,9 @@ function FormPage() {
                             <Form.Label>Gender</Form.Label>
                             <Form.Select
                                 defaultValue="Choose..."
+                                ref={refGender}
                                 onChange={e => setGender(e.target.value)}
+                                value={gender}
                             >
                                 <option>Choose...</option>
                                 <option value="male">Male</option>
@@ -175,7 +214,9 @@ function FormPage() {
                             <Form.Control
                                 type="number"
                                 placeholder="Enter Your number"
+                                ref={refPhone}
                                 onChange={e => setPhone(e.target.value)}
+                                value={phone}
                             />
                             </Form.Group>
                         </Row>
@@ -185,8 +226,10 @@ function FormPage() {
                             <Form.Control
                                 as="textarea"
                                 placeholder="details here...."
+                                ref={refDetails}
                                 style={{ height: '100px' }}
                                 onChange={e => setDetails(e.target.value)}
+                                value={details}
                             />
                         </Form.Group>
 

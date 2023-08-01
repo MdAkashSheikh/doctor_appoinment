@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/get-data', async(req, res) => {
     
     try {
-        const AllData = await masterSc.find({}).sort('-date');
+        const AllData = await patientSc.find({}).sort('-date');
         res.send({AllData});
 
     } catch (err) {
@@ -72,6 +72,7 @@ app.post('/client-data', async(req, res) => {
     const gender = req.body.gender;
     const phone = req.body.phone;
     const details = req.body.details;
+    const status = req.body.status;
 
     try {
         
@@ -86,6 +87,7 @@ app.post('/client-data', async(req, res) => {
             "gender": gender,
             "phone": phone,
             "details": details,
+            "status": status,
         })
 
         res.send(req.body);

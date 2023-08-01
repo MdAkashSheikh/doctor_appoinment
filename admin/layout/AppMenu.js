@@ -34,6 +34,7 @@ const AppMenu = () => {
                 {
                     label: "General Setting",
                     icon: "pi pi-fw pi-bookmark",
+                    to: '/pages/general-set  '
                 },
                 {
                     label: "SMS Templates",
