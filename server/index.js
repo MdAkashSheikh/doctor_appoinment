@@ -21,6 +21,19 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 })
 
+
+
+app.get('/get-data', async(req, res) => {
+    
+    try {
+        const AllData = await masterSc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.send(err);
+    }
+})
+
 app.post('/master-data', async(req, res) => {
 
     const chamber = req.body.chamber;

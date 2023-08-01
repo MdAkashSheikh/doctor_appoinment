@@ -2,11 +2,11 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { RadioButton } from 'primereact/radiobutton';
-import { Rating } from 'primereact/rating';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
@@ -16,13 +16,20 @@ import { ProductService } from '../../../demo/service/ProductService';
 const Appointment = () => {
     let emptyProduct = {
         id: null,
+        sl: 0,
+        appointmentDate:'',
+        doctor: '',
+        specialist: '',
+        serialNumber:0,
         name: '',
+        phone:'',
+        sex:'',
+        time:'',
+        chamber: '',
         image: null,
-        description: '',
         category: null,
         price: 0,
-        quantity: 0,
-        rating: 0,
+        problem: '',
         inventoryStatus: 'Success'
     };
 
@@ -120,10 +127,9 @@ const Appointment = () => {
     };
 
     const createId = () => {
-        let id = '';
-        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
+        let id = 0;
+        for (let i = 0; i < products.length; i++) {
+            id=i+1;
         }
         return id;
     };
@@ -132,17 +138,6 @@ const Appointment = () => {
         dt.current.exportCSV();
     };
 
-    const confirmDeleteSelected = () => {
-        setDeleteProductsDialog(true);
-    };
-
-    const deleteSelectedProducts = () => {
-        let _products = products.filter((val) => !selectedProducts.includes(val));
-        setProducts(_products);
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    };
 
     const onCategoryChange = (e) => {
         let _product = { ...product };
@@ -166,6 +161,50 @@ const Appointment = () => {
         setProduct(_product);
     };
 
+
+    const onChamberChange = (e) => {
+        let _product = {...product };
+        _product['chamber'] = e.value;
+        setProduct(_product);
+    }
+
+    const onDoctorChange = (e) => {
+        let _product = {...product};
+        _product['doctor'] = e.value;
+        setProduct(_product);
+    }
+
+    const onSpecialistChange = (e) => {
+        let _product = {...product};
+        _product['specialist'] = e.value;
+        setProduct(_product);
+    }
+
+    const chamberList = [
+        { label: 'A', value: 'Chamber-A' },
+        { label: 'B', value: 'Chamber-B' },
+        { label: 'C', value: 'Chamber-C' },
+        { label: 'D', value: 'Chamber-D' },
+        { label: 'E', value: 'Chamber-E' },
+    ];
+
+    const doctorList = [
+        { label: 'Dr. ABC', value: 'abc' },
+        { label: 'Dr. XYZ', value: 'xyz' },
+        { label: 'Dr. PQR', value: 'pqr' },
+        { label: 'Dr. LMN', value: 'lmn' },
+        { label: 'Dr. PPM', value: 'ppm' },
+    ];
+
+    const specialistList = [
+        { label: 'Obstetrician/gynecologists', value: 'Obstetrician/gynecologists' },
+        { label: 'Ophthalmologists', value: 'Ophthalmologists' },
+        { label: 'Cardiologists', value: 'Cardiologists' },
+        { label: 'Gastroenterologists', value: 'Gastroenterologists' },
+        { label: 'Orthopedic surgeons', value: 'Orthopedic surgeons' },
+    ];
+  
+
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -182,7 +221,7 @@ const Appointment = () => {
             <React.Fragment>
                 {/* <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="mr-2 inline-block" /> */}
                 <Button
-                    label="Add Patient"
+                    label="Add Appointment"
                     icon="pi pi-plus"
                     severity="sucess"
                     className="mr-2"
@@ -202,7 +241,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Code</span>
-                {rowData.code}
+                {rowData.id}
             </>
         );
     };
@@ -215,6 +254,24 @@ const Appointment = () => {
             </>
         );
     };
+
+    const phoneBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Phone</span>
+                {rowData.phone}
+            </>
+        );
+    }
+
+    const appointDateBodyTemplete = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Appointment Date</span>
+                {rowData.appointmentDate}
+            </>
+        );
+    }
 
     const imageBodyTemplate = (rowData) => {
         return (
@@ -234,6 +291,15 @@ const Appointment = () => {
         );
     };
 
+    const serialNumberBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Serial Number</span>
+                {rowData.serialNumber}
+            </>
+        );
+    }
+
     const categoryBodyTemplate = (rowData) => {
         return (
             <>
@@ -243,14 +309,42 @@ const Appointment = () => {
         );
     };
 
-    const ratingBodyTemplate = (rowData) => {
+    const problemBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Reviews</span>
-                <Rating value={rowData.rating} readOnly cancel={false} />
+                <span className="p-column-title">Problem</span>
+                {rowData.problem}
             </>
         );
-    };
+    }
+
+    const chamberBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Chamber</span>
+                {rowData.chamber}
+            </>
+        );
+    }
+
+    const timeBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Time</span>
+                {rowData.time}
+            </>
+        );
+    }
+    
+    const sexBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Sex</span>
+                {rowData.sex}
+            </>
+        );
+    }
+
 
     const statusBodyTemplate = (rowData) => {
         return (
@@ -272,7 +366,7 @@ const Appointment = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h2 className="m-0">Patient List</h2>
+            <h2 className="m-0">Appointment List</h2>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -292,23 +386,13 @@ const Appointment = () => {
             <Button label="Yes" icon="pi pi-check" text onClick={deleteProduct} />
         </>
     );
-    const deleteProductsDialogFooter = (
-        <>
-            <Button label="No" icon="pi pi-times" text onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" text onClick={deleteSelectedProducts} />
-        </>
-    );
+   
 
     return (
         <div className="grid crud-demo">
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
-                    {/* <Toolbar
-                        className="mb-4"
-                        left={leftToolbarTemplate}
-                        right={rightToolbarTemplate}
-                    ></Toolbar> */}
 
                     <DataTable
                         ref={dt}
@@ -327,11 +411,25 @@ const Appointment = () => {
                         header={header}
                         responsiveLayout="scroll"
                     >
-                        <Column
-                            selectionMode="multiple"
-                            headerStyle={{ width: "2rem" }}
-                        ></Column>
                         {/* <Column field="code" header="Code" sortable body={codeBodyTemplate} headerStyle={{ minWidth: '15rem' }}></Column> */}
+                        <Column
+                            field="sl"
+                            header="SL"
+                            body={codeBodyTemplate}
+                            sortable
+                        ></Column>
+                        <Column
+                            field="appointmentDate"
+                            header="Appointment Date"
+                            sortable
+                            body={appointDateBodyTemplete}
+                            headerStyle={{ minWidth: "10rem" }}
+                        ></Column>
+                        <Column
+                            field="serialNumber"
+                            header="Serial Number"
+                            body={serialNumberBodyTemplate}
+                        ></Column>
                         <Column
                             field="name"
                             header="Name"
@@ -341,23 +439,35 @@ const Appointment = () => {
                         ></Column>
                         {/* <Column header="Image" body={imageBodyTemplate}></Column> */}
                         <Column
-                            field="price"
-                            header="Price"
-                            body={priceBodyTemplate}
-                            sortable
+                            field="phone"
+                            header="Phone"
+                            body={phoneBodyTemplate}
                         ></Column>
                         <Column
-                            field="category"
-                            header="Category"
+                            field="sex"
+                            header="Sex"
                             sortable
-                            body={categoryBodyTemplate}
+                            body={sexBodyTemplate}
+                            headerStyle={{ minWidth: "3rem" }}
+                        ></Column>
+                        <Column
+                            field="time"
+                            header="Time"
+                            body={timeBodyTemplate}
+                            headerStyle={{ minWidth: "3rem" }}
+                        ></Column>
+                        <Column
+                            field="chamber"
+                            header="Chamber"
+                            sortable
+                            body={chamberBodyTemplate}
                             headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                         <Column
-                            field="rating"
-                            header="Reviews"
-                            body={ratingBodyTemplate}
-                            sortable
+                            field="problem"
+                            header="Problem"
+                            body={problemBodyTemplate}
+                            headerStyle={{ minWidth: "5rem" }}
                         ></Column>
                         <Column
                             field="inventoryStatus"
@@ -369,27 +479,92 @@ const Appointment = () => {
                         <Column
                             header="Action"
                             body={actionBodyTemplate}
-                            headerStyle={{ minWidth: "3rem" }}
+                            headerStyle={{ minWidth: "2rem" }}
                         ></Column>
                     </DataTable>
 
                     <Dialog
                         visible={productDialog}
                         style={{ width: "450px" }}
-                        header="Product Details"
+                        header="Patient Details"
                         modal
                         className="p-fluid"
                         footer={productDialogFooter}
                         onHide={hideDialog}
                     >
-                        {product.image && (
+                        {/* {product.image && (
                             <img
                                 src={`/demo/images/product/${product.image}`}
                                 alt={product.image}
                                 width="150"
                                 className="mt-0 mx-auto mb-5 block shadow-2"
                             />
-                        )}
+                        )} */}
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="chamber">Chamber</label>
+                                <Dropdown
+                                    value={product.chamber}
+                                    name='chamber'
+                                    onChange={(e) => onChamberChange(e)}
+                                    options={chamberList}
+                                    optionLabel="value"
+                                    showClear
+                                    placeholder="Select a Chamber"
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "chamber-invalid": submitted && !product.chamber,
+                                    })}
+                                />
+                                </div>
+                                {submitted && !product.chamber && (
+                                    <small className="chamber-invalid">
+                                        Chamber is required.
+                                    </small>
+                                )}
+                        </div>
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="specialist">Specialization</label>
+                                <Dropdown
+                                    value={product.specialist}
+                                    name='spcialist'
+                                    onChange={(e) => onSpecialistChange(e)}
+                                    options={specialistList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Chamber"
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "cham-invalid": submitted && !product.chamber,
+                                    })}
+                                />
+                                {submitted && !product.chamber && (
+                                    <small className="cham-invalid">
+                                        Chamber is required.
+                                    </small>
+                                )}
+                            </div>
+                            <div className="field col">
+                                <label htmlFor="doctor">Doctor</label>
+                                <Dropdown
+                                    value={product.doctor}
+                                    name='doctor'
+                                    onChange={(e) => onDoctorChange(e)}
+                                    options={doctorList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Doctor"
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "p-invalid": submitted && !product.doctor,
+                                    })}
+                                />
+                            </div>
+                        </div>
                         <div className="field">
                             <label htmlFor="name">Name</label>
                             <InputText
@@ -407,19 +582,6 @@ const Appointment = () => {
                                     Name is required.
                                 </small>
                             )}
-                        </div>
-                        <div className="field">
-                            <label htmlFor="description">Description</label>
-                            <InputTextarea
-                                id="description"
-                                value={product.description}
-                                onChange={(e) =>
-                                    onInputChange(e, "description")
-                                }
-                                required
-                                rows={3}
-                                cols={20}
-                            />
                         </div>
 
                         <div className="field">
@@ -504,51 +666,21 @@ const Appointment = () => {
                                 />
                             </div>
                         </div>
-                    </Dialog>
-
-                    <Dialog
-                        visible={deleteProductDialog}
-                        style={{ width: "450px" }}
-                        header="Confirm"
-                        modal
-                        footer={deleteProductDialogFooter}
-                        onHide={hideDeleteProductDialog}
-                    >
-                        <div className="flex align-items-center justify-content-center">
-                            <i
-                                className="pi pi-exclamation-triangle mr-3"
-                                style={{ fontSize: "2rem" }}
+                        <div className="field">
+                            <label htmlFor="description">Details</label>
+                            <InputTextarea
+                                id="description"
+                                value={product.description}
+                                onChange={(e) =>
+                                    onInputChange(e, "description")
+                                }
+                                required
+                                rows={3}
+                                cols={20}
                             />
-                            {product && (
-                                <span>
-                                    Are you sure you want to delete{" "}
-                                    <b>{product.name}</b>?
-                                </span>
-                            )}
                         </div>
                     </Dialog>
-
-                    <Dialog
-                        visible={deleteProductsDialog}
-                        style={{ width: "450px" }}
-                        header="Confirm"
-                        modal
-                        footer={deleteProductsDialogFooter}
-                        onHide={hideDeleteProductsDialog}
-                    >
-                        <div className="flex align-items-center justify-content-center">
-                            <i
-                                className="pi pi-exclamation-triangle mr-3"
-                                style={{ fontSize: "2rem" }}
-                            />
-                            {product && (
-                                <span>
-                                    Are you sure you want to delete the selected
-                                    products?
-                                </span>
-                            )}
-                        </div>
-                    </Dialog>
+                    
                     <Toolbar
                         className="mb-4"
                         left={rightToolbarTemplate}
