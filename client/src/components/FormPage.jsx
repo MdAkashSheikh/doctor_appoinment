@@ -7,11 +7,12 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { ToastContainer, toast } from 'react-toastify';
 
 const baseUrl = "//localhost:5000";
         
 function FormPage() {
+
     const [chamber, setChamber] = useState('');
     const [specialist, setSpecialist] = useState('');
     const [doctor, setDoctor] = useState('');
@@ -22,19 +23,9 @@ function FormPage() {
     const [gender, setGender] = useState('');
     const [phone, setPhone] = useState('');
     const [details, setDetails] = useState('');
-    const [status, setStattus] = useState('Not Updated')
+    const [status, setStatus] = useState('Not Updated')
 
-    
-    const refChamber = useRef("");
-    const refSpecialist = useRef("");
-    const refDoctor = useRef("");
-    const refDate = useRef("");
-    const refTime = useRef("");
-    const refName = useRef("");
-    const refAge = useRef("");
-    const refGender = useRef("");
-    const refPhone = useRef("");
-    const refDetails = useRef("");
+    const ref = useRef();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -62,27 +53,33 @@ function FormPage() {
                 age: age,
                 gender: gender,
                 phone: phone,
-                details:details,
-                status:status,
+                details: details,
+                status: status,
             })
             
             console.log(result.data);
+            reset();
 
         } catch (err) {
             console.log(err);
         }
-
-        refChamber.current.value = "";
-        refSpecialist.current.value = "";
-        refDoctor.current.value = "";
-        refDate.current.value = "";
-        refTime.current.value = "";
-        refName.current.value = "";
-        refAge.current.value = "";
-        refGender.current.value = "";
-        refPhone.current.value = "";
-        refDetails.current.value = "";
     }
+
+    const reset = () => {
+
+        setChamber('');
+        setSpecialist('');
+        setDoctor('');
+        setDate1('');
+        setTime1('');
+        setName('');
+        setAge('');
+        setGender('');
+        setPhone('');
+        setDetails('');
+    };
+
+    const notify = () => toast("Successfully Submitted");
 
     return (
         <div>
@@ -96,7 +93,6 @@ function FormPage() {
                             <Form.Label>Chamber</Form.Label>
                             <Form.Select 
                                 defaultValue="Choose..."
-                                ref={refChamber}
                                 onChange={e => setChamber(e.target.value)}
                                 value={chamber}
                             >
@@ -113,7 +109,6 @@ function FormPage() {
                             <Form.Label>Select Specialization</Form.Label>
                             <Form.Select
                                  defaultValue="Choose..."
-                                 ref={refSpecialist}
                                  onChange={e => setSpecialist(e.target.value)}
                                  value={specialist}
                             >
@@ -128,7 +123,6 @@ function FormPage() {
                             <Form.Label>Doctor</Form.Label>
                             <Form.Select 
                                 defaultValue="Choose..."
-                                ref={refDoctor}
                                 onChange={e => setDoctor(e.target.value)}
                                 value={doctor}
                             >
@@ -157,7 +151,6 @@ function FormPage() {
                             <Form.Label>Select Time</Form.Label>
                             <Form.Select
                                 defaultValue="Choose..."
-                                ref={refTime}
                                 onChange={e => setTime1(e.target.value)}
                                 value={time1}
                             >
@@ -176,7 +169,6 @@ function FormPage() {
                             <Form.Control
                                 type="text"
                                 placeholder="Enter Your Name"
-                                ref={refName}
                                 onChange={e => setName(e.target.value)}
                                 value={name}
                             />
@@ -187,7 +179,6 @@ function FormPage() {
                             <Form.Control
                                 type="number"
                                 placeholder="Enter Your Age"
-                                ref={refAge}
                                 onChange={e => setAge(e.target.value)}
                                 value={age}
                             />
@@ -199,7 +190,6 @@ function FormPage() {
                             <Form.Label>Gender</Form.Label>
                             <Form.Select
                                 defaultValue="Choose..."
-                                ref={refGender}
                                 onChange={e => setGender(e.target.value)}
                                 value={gender}
                             >
@@ -214,7 +204,6 @@ function FormPage() {
                             <Form.Control
                                 type="number"
                                 placeholder="Enter Your number"
-                                ref={refPhone}
                                 onChange={e => setPhone(e.target.value)}
                                 value={phone}
                             />
@@ -226,16 +215,19 @@ function FormPage() {
                             <Form.Control
                                 as="textarea"
                                 placeholder="details here...."
-                                ref={refDetails}
                                 style={{ height: '100px' }}
                                 onChange={e => setDetails(e.target.value)}
                                 value={details}
                             />
                         </Form.Group>
 
-                        <Button onClick={handleSubmit} variant="primary" type="submit">
+                        <Button variant="primary" type="submit" onClick={() => {
+                            notify();
+                        }} >
                             Submit
                         </Button>
+                        <ToastContainer />
+                      
                     </Form>
                     </Card.Body>
                 </Card>
