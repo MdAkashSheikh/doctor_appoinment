@@ -22,6 +22,7 @@ const AppMenu = () => {
                 {
                     label: "Time Management",
                     icon: "pi pi-fw pi-bookmark",
+                    to: '/pages/time-manage'
                 },
                 {
                     label: "Chamber Menagement",

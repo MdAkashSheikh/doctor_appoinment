@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
-import { useForm, Controller } from 'react-hook-form';
-import { Editor } from 'primereact/editor';
 import { Button } from 'primereact/button';
+import { Editor } from 'primereact/editor';
 import { Toast } from 'primereact/toast';
+import React, { useRef } from "react";
+import { Controller, useForm } from 'react-hook-form';
 
 export default function HookFormDoc() {
     const toast = useRef(null);
 
     const show = () => {
-        toast.current.show({ severity: 'success', summary: 'Submission Received', detail: 'The blog is uploaded' });
+        toast.current.show({ severity: 'success', summary: 'Message is Saved', detail: 'The message is updeted' });
     };
 
     const renderHeader = () => {
@@ -45,7 +45,10 @@ export default function HookFormDoc() {
     };
 
     return (
+
         <div className="card">
+            <h2>General Setting</h2>
+            <div className='mt-3'>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Toast ref={toast} />
                 <Controller
@@ -59,6 +62,7 @@ export default function HookFormDoc() {
                     <Button type="submit" label="Save" />
                 </div>
             </form>
+            </div>
         </div>
     )
 }

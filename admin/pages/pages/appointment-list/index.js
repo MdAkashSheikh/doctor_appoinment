@@ -3,10 +3,8 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { RadioButton } from 'primereact/radiobutton';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
@@ -20,7 +18,7 @@ const Appointment = () => {
         date1:'',
         doctor: '',
         specialist: '',
-        serialNumber:0,
+        serial: '',
         name: '',
         phone:'',
         age: '',
@@ -182,6 +180,18 @@ const Appointment = () => {
         setProduct(_product);
     }
 
+    const onTimeChange = (e) => {
+        let _product = {...product};
+        _product['time1'] = e.value;
+        setProduct(_product);
+    }
+
+    const onGanderChange = (e) => {
+        let _product = {...product};
+        _product['gender'] = e.value;
+        setProduct(_product);
+    }
+
     const chamberList = [
         { label: 'A', value: 'Chamber-A' },
         { label: 'B', value: 'Chamber-B' },
@@ -205,8 +215,19 @@ const Appointment = () => {
         { label: 'Gastroenterologists', value: 'Gastroenterologists' },
         { label: 'Orthopedic surgeons', value: 'Orthopedic surgeons' },
     ];
-  
 
+    const timeList = [
+        { label: '09:00AM-12:00PM', value: '9-12' },
+        { label: '02:00PM-05:00PM', value: '2-5' },
+        { label: '05:00PM-08:00PM', value: '5-8' },
+    ];
+
+    const genderList = [
+        { label: 'Male', value: 'male'},
+        { label: 'Female', value: 'female'},
+    ];
+
+    
     const leftToolbarTemplate = () => {
         return (
             <React.Fragment>
@@ -339,10 +360,10 @@ const Appointment = () => {
         );
     }
     
-    const sexBodyTemplate = (rowData) => {
+    const genderBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Sex</span>
+                <span className="p-column-title">Gender</span>
                 {rowData.gender}
             </>
         );
@@ -448,9 +469,9 @@ const Appointment = () => {
                         ></Column>
                         <Column
                             field="gender"
-                            header="Sex"
+                            header="Gender"
                             sortable
-                            body={sexBodyTemplate}
+                            body={genderBodyTemplate}
                             headerStyle={{ minWidth: "3rem" }}
                         ></Column>
                         <Column
@@ -517,12 +538,12 @@ const Appointment = () => {
                                     required
                                     autoFocus
                                     className={classNames({
-                                        "chamber-invalid": submitted && !product.chamber,
+                                        "p-invalid": submitted && !product.chamber,
                                     })}
                                 />
                                 </div>
                                 {submitted && !product.chamber && (
-                                    <small className="chamber-invalid">
+                                    <small className="p-invalid">
                                         Chamber is required.
                                     </small>
                                 )}
@@ -541,12 +562,12 @@ const Appointment = () => {
                                     required
                                     autoFocus
                                     className={classNames({
-                                        "cham-invalid": submitted && !product.chamber,
+                                        "p-invalid": submitted && !product.specialist,
                                     })}
                                 />
                                 {submitted && !product.chamber && (
-                                    <small className="cham-invalid">
-                                        Chamber is required.
+                                    <small className="p-invalid">
+                                        Specialization is required.
                                     </small>
                                 )}
                             </div>
@@ -566,109 +587,117 @@ const Appointment = () => {
                                         "p-invalid": submitted && !product.doctor,
                                     })}
                                 />
-                            </div>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="name">Name</label>
-                            <InputText
-                                id="name"
-                                value={product.name}
-                                onChange={(e) => onInputChange(e, "name")}
-                                required
-                                autoFocus
-                                className={classNames({
-                                    "p-invalid": submitted && !product.name,
-                                })}
-                            />
-                            {submitted && !product.name && (
-                                <small className="p-invalid">
-                                    Name is required.
-                                </small>
-                            )}
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Category</label>
-                            <div className="formgrid grid">
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category1"
-                                        name="category"
-                                        value="Accessories"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Accessories"
-                                        }
-                                    />
-                                    <label htmlFor="category1">
-                                        Accessories
-                                    </label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category2"
-                                        name="category"
-                                        value="Clothing"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Clothing"
-                                        }
-                                    />
-                                    <label htmlFor="category2">Clothing</label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category3"
-                                        name="category"
-                                        value="Electronics"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Electronics"
-                                        }
-                                    />
-                                    <label htmlFor="category3">
-                                        Electronics
-                                    </label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category4"
-                                        name="category"
-                                        value="Fitness"
-                                        onChange={onCategoryChange}
-                                        checked={product.category === "Fitness"}
-                                    />
-                                    <label htmlFor="category4">Fitness</label>
-                                </div>
+                                {submitted && !product.chamber && (
+                                    <small className="p-invalid">
+                                        Doctor is required.
+                                    </small>
+                                )}
                             </div>
                         </div>
 
                         <div className="formgrid grid">
                             <div className="field col">
-                                <label htmlFor="price">Price</label>
-                                <InputNumber
-                                    id="price"
-                                    value={product.price}
-                                    onValueChange={(e) =>
-                                        onInputNumberChange(e, "price")
-                                    }
-                                    mode="currency"
-                                    currency="USD"
-                                    locale="en-US"
+                                <label htmlFor="date1">Date</label>
+                                <Dropdown
+                                    value={product.specialist}
+                                    name='spcialist'
+                                    onChange={(e) => onSpecialistChange(e)}
+                                    options={specialistList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Chamber"
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "p-invalid": submitted && !product.specialist,
+                                    })}
                                 />
+                                {submitted && !product.chamber && (
+                                    <small className="p-invalid">
+                                        Specialization is required.
+                                    </small>
+                                )}
                             </div>
                             <div className="field col">
-                                <label htmlFor="quantity">Quantity</label>
-                                <InputNumber
-                                    id="quantity"
-                                    value={product.quantity}
-                                    onValueChange={(e) =>
-                                        onInputNumberChange(e, "quantity")
-                                    }
-                                    integeronly="true"
+                                <label htmlFor="time1">Time</label>
+                                <Dropdown
+                                    value={product.doctor}
+                                    name='time1'
+                                    onChange={(e) => onTimeChange(e)}
+                                    options={timeList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Time"
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "p-invalid": submitted && !product.time1,
+                                    })}
+                                />
+                                {submitted && !product.chamber && (
+                                    <small className="p-invalid">
+                                        Time is required.
+                                    </small>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="name">Name</label>
+                                <InputText
+                                    id="name"
+                                    value={product.name}
+                                    onChange={(e) => onInputChange(e, "name")}
+                                    required
+                                    autoFocus
+                                    className={classNames({
+                                        "p-invalid": submitted && !product.name,
+                                    })}
+                                />
+                                {submitted && !product.name && (
+                                    <small className="p-invalid">
+                                        Name is required.
+                                    </small>
+                                )}
+                            </div>
+                            <div className="field col">
+                                <label htmlFor="age">Age</label>
+                                <InputText
+                                    id="age"
+                                    value={product.age}
+                                    onChange={(e) => onInputChange(e, "age")}
+                                    autoFocus
                                 />
                             </div>
                         </div>
+
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="gender">Gender</label>
+                                <Dropdown
+                                    value={product.gender}
+                                    name='gender'
+                                    onChange={(e) => onGanderChange(e)}
+                                    options={genderList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Gender"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="field col">
+                                <label htmlFor="phone">Phone</label>
+                                <InputText
+                                    id="phone"
+                                    value={product.phone}
+                                    onChange={(e) => onInputChange(e, "phone")}
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+
                         <div className="field">
                             <label htmlFor="description">Details</label>
                             <InputTextarea
@@ -681,6 +710,24 @@ const Appointment = () => {
                                 rows={3}
                                 cols={20}
                             />
+                        </div>
+                        <div className="field">
+                            <label htmlFor="serial">Add Serial Number</label>
+                            <InputText
+                                id="serial"
+                                value={product.serial}
+                                onChange={(e) => onInputChange(e, "serial")}
+                                required
+                                autoFocus
+                                className={classNames({
+                                    "p-invalid": submitted && !product.serial,
+                                })}
+                            />
+                            {submitted && !product.serial && (
+                                <small className="p-invalid">
+                                    Serial Number is required.
+                                </small>
+                            )}
                         </div>
                     </Dialog>
                     
