@@ -27,6 +27,7 @@ const AppMenu = () => {
                 {
                     label: "Chamber Menagement",
                     icon: "pi pi-fw pi-bookmark",
+                    to: "/pages/chamber-manage"
                 },
                 {
                     label: "Availability Management",
