@@ -32,6 +32,7 @@ const AppMenu = () => {
                 {
                     label: "Availability Management",
                     icon: "pi pi-fw pi-bookmark",
+                    to: "/pages/availability-manage"
                 },
                 {
                     label: "General Setting",
