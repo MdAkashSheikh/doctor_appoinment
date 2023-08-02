@@ -8,6 +8,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
+import { Skeleton } from 'primereact/skeleton';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
@@ -114,17 +115,6 @@ const Appointment = () => {
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
     };
 
-    const findIndexById = (id) => {
-        let index = -1;
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
 
     const createId = () => {
         let id = 0;
@@ -138,13 +128,6 @@ const Appointment = () => {
         dt.current.exportCSV();
     };
 
-
-    const onCategoryChange = (e) => {
-        let _product = { ...product };
-        _product['category'] = e.value;
-        setProduct(_product);
-    };
-
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
         let _product = { ...product };
@@ -153,13 +136,6 @@ const Appointment = () => {
         setProduct(_product);
     };
 
-    const onInputNumberChange = (e, name) => {
-        const val = e.value || 0;
-        let _product = { ...product };
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
 
 
     const onChamberChange = (e) => {
@@ -227,17 +203,6 @@ const Appointment = () => {
         { label: 'Female', value: 'female'},
     ];
 
-    
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <div className="my-2">
-                    <Button label="New" icon="pi pi-plus" severity="sucess" className="mr-2" onClick={openNew} />
-                    {/* <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} /> */}
-                </div>
-            </React.Fragment>
-        );
-    };
 
     const rightToolbarTemplate = () => {
         return (
@@ -388,9 +353,18 @@ const Appointment = () => {
         );
     };
 
+    const topHeader = () => {
+        return (
+            <React.Fragment>
+                <div className="my-2">
+                <h2 className="m-0">Appointment List</h2>
+                </div>
+            </React.Fragment>
+        );
+    };
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h2 className="m-0">Appointment List</h2>
             <span className="block mt-2 md:mt-0 p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -410,14 +384,48 @@ const Appointment = () => {
             <Button label="Yes" icon="pi pi-check" text onClick={deleteProduct} />
         </>
     );
-   
+    
+    
+    
+
+    if(products == null) {
+        return (
+            <div className="card">
+            <div className="border-round border-1 surface-border p-4 surface-card">
+                <div className="flex mb-3">
+                    <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                    <div>
+                        <Skeleton width="10rem" className="mb-2"></Skeleton>
+                        <Skeleton width="5rem" className="mb-2"></Skeleton>
+                        <Skeleton height=".5rem"></Skeleton>
+                    </div>
+                </div>
+                <Skeleton width="1300px" height="500px"></Skeleton>
+                <div className="flex justify-content-between mt-3">
+                    <Skeleton width="4rem" height="2rem"></Skeleton>
+                    <Skeleton width="4rem" height="2rem"></Skeleton>
+                </div>
+            </div>
+        </div>
+        )
+    }
+
+  
 
     return (
         <div className="grid crud-demo">
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
+                    <Toolbar
+                        className="mb-4"
+                        left={topHeader}
+                    ></Toolbar>
 
+                    {/* <Toolbar
+                        className="mb-4"
+                        left={loadingDialog}
+                    ></Toolbar> */}
                     <DataTable
                         ref={dt}
                         value={products}
