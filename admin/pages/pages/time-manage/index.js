@@ -2,15 +2,18 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
+import { Skeleton } from 'primereact/skeleton';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
 const Time_Manage = () => {
     let emptyProduct = {
+        id: 0,
         st_time: '',
         en_time: '',
     };
@@ -23,7 +26,6 @@ const Time_Manage = () => {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
-    const [file, setFile] = useState();
     const toast = useRef(null);
     const dt = useRef(null);
     const [toggleRefresh, setTogleRefresh] = useState(false);
@@ -31,7 +33,7 @@ const Time_Manage = () => {
 
     useEffect(() => {
         ProductService.getProducts().then((data) => setProducts(data));
-    }, [toggleRefresh]);
+    }, []);
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -55,25 +57,17 @@ const Time_Manage = () => {
     const saveProduct = () => {
         setSubmitted(true);
 
-        console.log("PP1", product);
-        if((product.name && product.phone) && file ) {
+        console.log("PPPP1",product)
+
+        if( product.st_time && product.en_time) {
             ProductService.postProducts(
-                product.name, 
-                product.phone, 
-                product.email, 
-                product.company, 
-                product.designation, 
-                product.interest, 
-                product.companyType, 
-                product.comm, 
-                file
-            ).then(()=>{
-                setTogleRefresh(!toggleRefresh)
+                product.st_time,
+                product.en_time,
+            ).then(() => {
+                setTogleRefresh(!toggleRefresh);
                 setProductDialog(false);
-            });
-    
+            })
         }
-        
     };
 
     const editProduct = (product) => {
@@ -87,65 +81,98 @@ const Time_Manage = () => {
     };
 
     const deleteProduct = () => {
-        ProductService.deleteProduct(product._id).then(()=>{
-            setTogleRefresh(!toggleRefresh);
-            setDeleteProductDialog(false);
-            setProduct(emptyProduct);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        });
-
-        
-    };
-
-
-    const deleteSelectedProducts = () => {
-        let _products = products.filter((val) => !selectedProducts.includes(val));
+        let _products = products.filter((val) => val.id !== product.id);
         setProducts(_products);
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+        setDeleteProductDialog(false);
+        setProduct(emptyProduct);
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Time Deleted', life: 3000 });
     };
 
 
-    const onInputChange = (e) => {
+
+    const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
         let _product = { ...product };
-        _product['name'] = val;
+        _product[`${name}`] = val;
 
         setProduct(_product);
     };
 
-    const leftToolbarTemplate = () => {
+
+    const onChamberChange = (e) => {
+        let _product = {...product };
+        _product['chamber'] = e.value;
+        setProduct(_product);
+    }
+
+
+    const onTimeChange = (e) => {
+        let _product = {...product};
+        _product['time1'] = e.value;
+        setProduct(_product);
+    }
+
+    const onDayChange = (e) => {
+        let _product = {...product};
+        _product['days'] = e.value;
+        setProduct(_product);
+    }
+
+    const chamberList = [
+        { label: 'Chamber-A', value: 'Chamber-A' },
+        { label: 'Chamber-B', value: 'Chamber-B' },
+        { label: 'Chamber-C', value: 'Chamber-C' },
+    ];
+
+    const timeList = [
+        { label: '09:00AM-12:00PM', value: '9-12' },
+        { label: '02:00PM-05:00PM', value: '2-5' },
+        { label: '05:00PM-08:00PM', value: '5-8' },
+    ];
+    
+
+    const daysList = [
+        { label: 'Saturday', value: 'Saturday'},
+        { label: 'Sunday', value: 'Sunday'},
+        { label: 'Monday', value: 'Monday'},
+        { label: 'Tuesday', value: 'Tuesday'},
+        { label: 'Wednesday', value: 'Wednesday'},
+        { label: 'Thursday', value: 'Thursday'},
+        { label: 'Friday', value: 'Friday'},
+    ]
+
+
+
+    const codeBodyTemplate = (rowData) => {
         return (
             <>
-                <React.Fragment>
-                    <div className="my-2">
-                        <h2 className="m-0 p-column-title">Time Management</h2>
-                        {/* <Button label="New" icon="pi pi-plus" severity="sucess" className="mr-2" onClick={openNew} /> */}
-                    </div>
-                </React.Fragment>
+                <span className="p-column-title">Code</span>
+                {rowData.id}
             </>
         );
     };
 
 
-    const nameBodyTemplate = (rowData) => {
+    const st_timeBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Name</span>
-                {rowData.name}
+                <span className="p-column-title">Start Time</span>
+                {rowData.st_time}
             </>
         );
-    };
+    }
 
-    const phoneBodyTemplate = (rowData) => {
+    const en_timeBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Phone</span>
-                {rowData.phone}
+                <span className="p-column-title">End Time</span>
+                {rowData.en_time}
             </>
         );
-    };
+    }
+
+
+
 
     const actionBodyTemplate = (rowData) => {
         return (
@@ -156,11 +183,29 @@ const Time_Manage = () => {
         );
     };
 
+        
+    const topHeader = () => {
+        return (
+            <React.Fragment>
+                <div className="my-2">
+                    <h2 className="m-0">Time Management</h2>
+                </div>
+            </React.Fragment>
+        );
+    };
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <Button label="New" icon="pi pi-plus" severity="sucess" className="mr-2" onClick={openNew} />
+            <Button
+                    label="Add Time"
+                    icon="pi pi-plus"
+                    severity="sucess"
+                    className="mr-2"
+                    onClick={openNew}
+                />
             <span className="block mt-2 md:mt-0 p-input-icon-left">
-
+                <i className="pi pi-search" />
+                <InputText type="search" onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
             </span>
         </div>
     );
@@ -177,21 +222,41 @@ const Time_Manage = () => {
             <Button label="Yes" icon="pi pi-check" text onClick={deleteProduct} />
         </>
     );
-    const deleteProductsDialogFooter = (
-        <>
-            <Button label="No" icon="pi pi-times" text onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" text onClick={deleteSelectedProducts} />
-        </>
-    );
-    // console.log("GORU",product);
+
+    if(products == null) {
+        return (
+            <div className="card">
+                <div className="border-round border-1 surface-border p-4 surface-card">
+                    <div className="flex mb-3">
+                        <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                        <div>
+                            <Skeleton width="10rem" className="mb-2"></Skeleton>
+                            <Skeleton width="5rem" className="mb-2"></Skeleton>
+                            <Skeleton height=".5rem"></Skeleton>
+                        </div>
+                    </div>
+                    <Skeleton width="1300px" height="500px"></Skeleton>
+                    <div className="flex justify-content-between mt-3">
+                        <Skeleton width="4rem" height="2rem"></Skeleton>
+                        <Skeleton width="4rem" height="2rem"></Skeleton>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+   
+
+
 
     return (
         <div className="grid crud-demo">
-            <div className="col-14">
+            <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
-                    <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
+                    <Toolbar
+                        className="mb-4"
+                        left={topHeader}
+                    ></Toolbar>
                     <DataTable
                         ref={dt}
                         value={products}
@@ -205,65 +270,72 @@ const Time_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="No products found."
+                        emptyMessage="Not found."
                         header={header}
                         responsiveLayout="scroll"
                     >
-                        
-                        <Column 
-                            field="name" 
-                            header="Start Time"  
-                            body={nameBodyTemplate} 
-                            headerStyle={{ minWidth: '15rem' }}
-                        >
-                        </Column>
-                        <Column field="phone" 
-                            header="End Time"  
-                            body={phoneBodyTemplate} 
-                            headerStyle={{ minWidth: '10rem' }}
-                        >
-                        </Column>
-                        <Column 
-                            header="Action" 
-                            body={actionBodyTemplate} 
-                            headerStyle={{ minWidth: '10rem' }}
-                        >
-                        </Column>
+
+                        <Column
+                            field="sl"
+                            header="SL"
+                            body={codeBodyTemplate}
+                            sortable
+                        ></Column>
+                        <Column
+                            field="st_time"
+                            header="Start Time"
+                            sortable
+                            body={st_timeBodyTemplate}
+                            headerStyle={{ minWidth: "10rem" }}
+                        ></Column>
+                         <Column
+                            field="en_time"
+                            header="End Time"
+                            body={en_timeBodyTemplate}
+                            headerStyle={{ minWidth: "5rem" }}
+                        ></Column>
+                        <Column
+                            header="Action"
+                            body={actionBodyTemplate}
+                            headerStyle={{ minWidth: "2rem" }}
+                        ></Column>
                     </DataTable>
 
-                    <Dialog 
-                        visible={productDialog} 
-                        style={{ width: '450px' }} 
-                        header="Add Time Schedule" 
-                        modal 
-                        className="p-fluid" 
-                        footer={productDialogFooter} 
+                    <Dialog
+                        visible={productDialog}
+                        style={{ width: "450px" }}
+                        header="Add Time Management "
+                        modal
+                        className="p-fluid"
+                        footer={productDialogFooter}
                         onHide={hideDialog}
                     >
-            
+                
                         <div className="field">
-                            <label htmlFor="name">Start Time</label>
+                            <label htmlFor="st_time">Start Time</label>
                             <InputText 
-                                id="name" 
-                                value={product.name} 
-                                onChange={(e) => onInputChange(e)} 
-                                required autoFocus 
-                                className={classNames({ 'p-invalid': submitted && !product.name })} 
+                                id="st_time" 
+                                value={product.st_time} 
+                                onChange={(e) => onInputChange(e, "st_time")} 
+                                required 
+                                autoFocus 
+                                className={classNames({ 'p-invalid': submitted && !product.st_time })} 
                                 />
-                            {submitted && !product.name && <small className="p-invalid">
-                                Name is required.
+                            {submitted && !product.st_time && <small className="p-invalid">
+                                Start Time is required.
                             </small>}
                         </div>
                         <div className="field">
-                            <label htmlFor="phone">End Time</label>
+                            <label htmlFor="en_time">End Time</label>
                             <InputText 
-                                id="phone" 
-                                value={product.phone} 
-                                onChange={(e) => onInputChange(e, 'phone')} 
-                                required  
-                                className={classNames({ 'p-invalid': submitted && !product.phone })} />
-                            {submitted && !product.phone && <small className="p-invalid">
-                                Phone is required.
+                                id="en_time" 
+                                value={product.en_time} 
+                                onChange={(e) => onInputChange(e, "en_time")} 
+                                required 
+                                className={classNames({ 'p-invalid': submitted && !product.en_time })} 
+                                />
+                            {submitted && !product.en_time && <small className="p-invalid">
+                                End Time is required.
                             </small>}
                         </div>
                     </Dialog>
@@ -278,17 +350,11 @@ const Time_Manage = () => {
                             )}
                         </div>
                     </Dialog>
-
-                    <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
-                        <div className="flex align-items-center justify-content-center">
-                            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                            {product && <span>Are you sure you want to delete the selected products?</span>}
-                        </div>
-                    </Dialog>
+                    
                 </div>
             </div>
         </div>
     );
 };
 
-export default Time_Manage;
+export default  Time_Manage;
