@@ -19,6 +19,8 @@ export const ProductService = {
             .then((d) => d.AllData);
     },
 
+    
+    //Master Chamber 
 
     async postChamber(chamber) {
         
@@ -31,15 +33,33 @@ export const ProductService = {
         )
     },
 
-    getChamber() {
-        return fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
+    async getChamber() {
+        return await fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
     },
 
-    getProductsWithOrdersSmall() {
-        return fetch('/demo/data/products-orders-small.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
+    
+    //Master Time
+
+    async postTime(st_time, en_time) {
+        
+        const formData = new FormData();
+
+        formData.append('st_time', st_time);
+        formData.append('en_time', en_time);
+
+        const res = await axios.post(
+            `${baseUrl}/post-time`,
+            formData,
+        )
+    },
+
+    async getTime() {
+        return await fetch(`${baseUrl}/get-time`, { headers: { 'Cache-Control': 'no-cache' } })
+        .then((res) => res.json())
+        .then((d) => d.AllData);
     }
+
+    
 };

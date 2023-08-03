@@ -31,7 +31,7 @@ const Time_Manage = () => {
 
 
     useEffect(() => {
-        ProductService.getProducts().then((data) => setProducts(data));
+        ProductService.getTime().then((data) => setProducts(data));
     }, []);
 
     const openNew = () => {
@@ -59,7 +59,7 @@ const Time_Manage = () => {
         console.log("PPPP1",product)
 
         if( product.st_time && product.en_time) {
-            ProductService.postProducts(
+            ProductService.postTime(
                 product.st_time,
                 product.en_time,
             ).then(() => {

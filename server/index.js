@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const masterSc = require('./models/masterSc');
 const patientSc = require('./models/patientSc');
 const chamberSc = require('./models/chamberSc');
+const timeSc = require('./models/timeSc');
 
 
 const app = express();
@@ -22,18 +23,6 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 })
 
-
-
-app.get('/get-data', async(req, res) => {
-    
-    try {
-        const AllData = await patientSc.find({}).sort('-date');
-        res.send({AllData});
-
-    } catch (err) {
-        res.send(err);
-    }
-})
 
 app.post('/master-data', async(req, res) => {
 
@@ -106,9 +95,24 @@ app.post('/client-data', async(req, res) => {
 })
 
 
+
+app.get('/get-data', async(req, res) => {
+    
+    try {
+        const AllData = await patientSc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.send(err);
+    }
+})
+
+
+
 //For Master Chamber
 
 app.post('/post-chamber', async(req, res) => {
+    
     console.log(req.body);
 
     const chamber = req.body.chamber;
@@ -140,7 +144,40 @@ app.get('/get-chamber', async(req, res) => {
 
 
 //For Master Time Management
+app.post('/post-time', async(req, res) => {
+    
+    console.log(req.body);
 
+    const st_time = req.body.s_time;
+    const en_time = req.body.en_time;
+
+    try {
+        const timeData = await timeSc.create({
+            "st_time": st_time,
+            "en_time": en_time,
+        })
+
+        res.send(req.body);
+        const newTime = new timeSc(timeData);
+        newTime.save();
+
+    } catch (err) {
+        res.status(404).send(err);
+        console.log(err)
+    }
+})
+
+
+app.get('/get-time', async(req, res) => {
+    try {
+        const AllData = await timeSc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.status(404).send(err);
+        console.log(err);
+    }
+})
 
 
 app.listen(5000, () => {
