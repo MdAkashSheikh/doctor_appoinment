@@ -7,10 +7,30 @@ const baseUrl = '//localhost:5000';
 // '/demo/data/products.json'
 export const ProductService = {
 
-    getProductsSmall() {
-        return fetch(`//localhost:5000/get-data`, { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
+
+    // Client and Appointment List
+    async postPatient(chamber, specialist, doctor, date1, time1, name, age, gender, phone, details, serial) {
+
+        const formData = new FormData();
+        
+        formData.append('chamber', chamber);
+        formData.append('specialist', specialist);
+        formData.append('doctor', doctor);
+        formData.append('date1', date1);
+        formData.append('time1', time1);
+        formData.append('name', name);
+        formData.append('age', age);
+        formData.append('gender', gender);
+        formData.append('phone', phone);
+        formData.append('details', details);
+        formData.append('serial', serial);
+        formData.append('status', "Not Updated");
+
+        const res = await axios.post(
+            `${baseUrl}/client-data`,
+            formData
+        )
+
     },
 
     getProducts() {
@@ -33,8 +53,8 @@ export const ProductService = {
         )
     },
 
-    async getChamber() {
-        return await fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
+    getChamber() {
+        return fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
     },
@@ -55,8 +75,8 @@ export const ProductService = {
         )
     },
 
-    async getTime() {
-        return await fetch(`${baseUrl}/get-time`, { headers: { 'Cache-Control': 'no-cache' } })
+    getTime() {
+        return fetch(`${baseUrl}/get-time`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
     },
@@ -79,9 +99,9 @@ export const ProductService = {
         )
     },
 
-    async getAvailable() {
+    getAvailable() {
         
-        return await fetch(`${baseUrl}/get-available`, { headers: { 'Cache-Control': 'no-cache' } })
+        return fetch(`${baseUrl}/get-available`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
     }

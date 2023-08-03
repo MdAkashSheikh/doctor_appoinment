@@ -79,7 +79,7 @@ const Appointment = () => {
         console.log("PPPP1",product)
 
         if(product.name && product.chamber && product.doctor && product.date1 && product.time1) {
-            ProductService.postProducts(
+            ProductService.postPatient(
                 product.chamber,
                 product.specialist,
                 product.doctor,
@@ -207,7 +207,6 @@ const Appointment = () => {
     const rightToolbarTemplate = () => {
         return (
             <React.Fragment>
-                {/* <FileUpload mode="basic" accept="image/*" maxFileSize={1000000} label="Import" chooseLabel="Import" className="mr-2 inline-block" /> */}
                 <Button
                     label="Add Appointment"
                     icon="pi pi-plus"
@@ -271,15 +270,6 @@ const Appointment = () => {
         );
     };
 
-    const priceBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Price</span>
-                {formatCurrency(rowData.price)}
-            </>
-        );
-    };
-
     const serialNumberBodyTemplate = (rowData) => {
         return (
             <>
@@ -288,15 +278,6 @@ const Appointment = () => {
             </>
         );
     }
-
-    const categoryBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Category</span>
-                {rowData.category}
-            </>
-        );
-    };
 
     const problemBodyTemplate = (rowData) => {
         return (
@@ -513,7 +494,7 @@ const Appointment = () => {
 
                     <Dialog
                         visible={productDialog}
-                        style={{ width: "450px" }}
+                        style={{ width: "600px" }}
                         header="Patient Details"
                         modal
                         className="p-fluid"

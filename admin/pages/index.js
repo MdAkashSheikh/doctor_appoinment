@@ -3,7 +3,6 @@ import { Button } from 'primereact/button';
 import { Chart } from 'primereact/chart';
 import { Menu } from 'primereact/menu';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ProductService } from '../demo/service/ProductService';
 import { LayoutContext } from '../layout/context/layoutcontext';
 const lineData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -98,9 +97,6 @@ const Dashboard = () => {
         setLineOptions(lineOptions);
     };
 
-    useEffect(() => {
-        ProductService.getProductsSmall().then((data) => setProducts(data));
-    }, []);
 
     useEffect(() => {
         if (layoutConfig.colorScheme === 'light') {
