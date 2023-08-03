@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+
+
 const baseUrl = '//localhost:5000';
 
 // '/demo/data/products.json'
@@ -13,6 +17,24 @@ export const ProductService = {
         return fetch(`${baseUrl}/get-data`, { headers: { 'Cache-Control': 'no-cache' } })
             .then((res) => res.json())
             .then((d) => d.AllData);
+    },
+
+
+    async postChamber(chamber) {
+        
+        const formData = new FormData();
+        formData.append('chamber', chamber);
+        
+        const res = await axios.post(
+            `${baseUrl}/post-chamber`,
+            formData
+        )
+    },
+
+    getChamber() {
+        return fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
+        .then((res) => res.json())
+        .then((d) => d.AllData);
     },
 
     getProductsWithOrdersSmall() {

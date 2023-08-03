@@ -110,9 +110,6 @@ const Dashboard = () => {
         }
     }, [layoutConfig.colorScheme]);
 
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
 
     return (
         <div className="grid">
@@ -123,8 +120,8 @@ const Dashboard = () => {
                             <span className="block text-500 font-medium mb-3">New Patient</span>
                             <div className="text-900 font-medium text-xl">152</div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-shopping-cart text-blue-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-inbox text-cyan-500 text-xl" />
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">24 new </span>
@@ -138,8 +135,8 @@ const Dashboard = () => {
                             <span className="block text-500 font-medium mb-3">Not Updated Patient</span>
                             <div className="text-900 font-medium text-xl">32</div>
                         </div>
-                        <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-map-marker text-orange-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-inbox text-cyan-500 text-xl" />
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">%52+ </span>
@@ -165,8 +162,8 @@ const Dashboard = () => {
                         <div>
                             <span className="block text-500 font-medium mb-3">New Chamber Requist From Doctor</span>
                             <div className="text-900 font-medium text-xl">6</div>
-                            </div>
-                        <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                        </div>
+                        <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
                             <i className="pi pi-inbox text-cyan-500 text-xl" />
                         </div>
                     </div>
@@ -209,8 +206,8 @@ const Dashboard = () => {
                             <span className="block text-500 font-medium mb-3">Patient Comments</span>
                             <div className="text-900 font-medium text-xl">62 Unread</div>
                             </div>
-                        <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <i className="pi pi-inbox text-cyan-500 text-xl" />
+                        <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                            <i className="pi pi-comment text-purple-500 text-xl" />
                         </div>
                     </div>
                     <span className="text-green-500 font-medium">85 </span>
@@ -337,7 +334,7 @@ const Dashboard = () => {
                         <div className="text-white font-medium text-5xl"></div>
                     </div>
                     <div className="mt-4 mr-auto md:mt-0 md:mr-0">
-                        <Link href="https://blocks.primereact.org" className="p-button font-bold px-5 py-3 p-button-warning p-button-rounded p-button-raised">
+                        <Link href="https://nittodigital.com/" className="p-button font-bold px-5 py-3 p-button-warning p-button-rounded p-button-raised">
                             Get Started
                         </Link>
                     </div>

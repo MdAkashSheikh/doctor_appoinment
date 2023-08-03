@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const masterSc = require('./models/masterSc');
 const patientSc = require('./models/patientSc');
+const chamberSc = require('./models/chamberSc');
 
 
 const app = express();
@@ -58,6 +59,9 @@ app.post('/master-data', async(req, res) => {
     }
 })
 
+
+//For Client
+
 app.post('/client-data', async(req, res) => {
 
     console.log(req.body);
@@ -100,6 +104,43 @@ app.post('/client-data', async(req, res) => {
     }
 
 })
+
+
+//For Master Chamber
+
+app.post('/post-chamber', async(req, res) => {
+    console.log(req.body);
+
+    const chamber = req.body.chamber;
+
+    try {
+        const chamberData = await chamberSc.create({
+            "chamber": chamber,
+        })
+        res.send(req.body);
+        const newChamber = new chamberSc(chamberData);
+        newChamber.save();
+
+    } catch (err) {
+        res.status(400).send(err);
+        console.log(err)
+    }
+})
+
+app.get('/get-chamber', async(req, res) => {
+    try {
+        const AllData = await chamberSc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.status(404).send(err);
+        console.log(err);
+    }
+})
+
+
+//For Master Time Management
+
 
 
 app.listen(5000, () => {

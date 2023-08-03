@@ -13,7 +13,7 @@ import { ProductService } from '../../../demo/service/ProductService';
 const Chamber_Manage = () => {
     let emptyProduct = {
         id: 0,
-        chamber: '',
+        // chamber: '',
     };
 
     const [products, setProducts] = useState(null);
@@ -30,7 +30,7 @@ const Chamber_Manage = () => {
 
 
     useEffect(() => {
-        ProductService.getProducts().then((data) => setProducts(data));
+        ProductService.getChamber().then((data) => setProducts(data));
     }, []);
 
     const openNew = () => {
@@ -57,8 +57,8 @@ const Chamber_Manage = () => {
 
         console.log("PPPP1",product)
 
-        if( product.chamber) {
-            ProductService.postProducts(
+        if( product.chamber ) {
+            ProductService.postChamber(
 
                 product.chamber,
 
@@ -67,6 +67,8 @@ const Chamber_Manage = () => {
                 setProductDialog(false);
             })
         }
+
+        console.log('PPP2', product)
     };
 
     const editProduct = (product) => {
@@ -192,7 +194,8 @@ const Chamber_Manage = () => {
         )
     }
    
-
+    
+    console.log('PPP3', product);
 
 
     return (

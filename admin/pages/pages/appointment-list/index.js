@@ -422,10 +422,6 @@ const Appointment = () => {
                         left={topHeader}
                     ></Toolbar>
 
-                    {/* <Toolbar
-                        className="mb-4"
-                        left={loadingDialog}
-                    ></Toolbar> */}
                     <DataTable
                         ref={dt}
                         value={products}
