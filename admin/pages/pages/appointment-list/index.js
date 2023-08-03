@@ -5,10 +5,10 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
-import { Skeleton } from 'primereact/skeleton';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
@@ -400,7 +400,7 @@ const Appointment = () => {
                         <Skeleton height=".5rem"></Skeleton>
                     </div>
                 </div>
-                <Skeleton width="1300px" height="500px"></Skeleton>
+                <Skeleton width="100%" height="500px"></Skeleton>
                 <div className="flex justify-content-between mt-3">
                     <Skeleton width="4rem" height="2rem"></Skeleton>
                     <Skeleton width="4rem" height="2rem"></Skeleton>
