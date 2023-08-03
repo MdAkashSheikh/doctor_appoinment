@@ -33,12 +33,8 @@ const Availability_Manage = () => {
 
 
     useEffect(() => {
-        ProductService.getProducts().then((data) => setProducts(data));
+        ProductService.getAvailable().then((data) => setProducts(data));
     }, []);
-
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -65,7 +61,7 @@ const Availability_Manage = () => {
         console.log("PPPP1",product)
 
         if( product.chamber && product.time1 && product.days && product.serial) {
-            ProductService.postProducts(
+            ProductService.postAvailable(
                 product.chamber,
                 product.time1,
                 product.days,
@@ -159,33 +155,26 @@ const Availability_Manage = () => {
         );
     };
 
-    const imageBodyTemplate = (rowData) => {
+
+    const timeBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Image</span>
-                <img src={`/demo/images/product/${rowData.image}`} alt={rowData.image} className="shadow-2" width="100" />
-            </>
-        );
-    };
-
-
-    const serialNumberBodyTemplate = (rowData) => {
-        return (
-            <>
-                <span className="p-column-title">Serial Number</span>
-                {rowData.serialNumber}
+                <span className="p-column-title">Time</span>
+                {rowData.time1}
             </>
         );
     }
 
-    const problemBodyTemplate = (rowData) => {
+    const daysBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Problem</span>
-                {rowData.details}
+                <span className="p-column-title">Days</span>
+                {rowData.days}
             </>
         );
     }
+
+    
 
     const chamberBodyTemplate = (rowData) => {
         return (
@@ -309,15 +298,15 @@ const Availability_Manage = () => {
                             headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                         <Column
-                            field="details"
+                            field="time1"
                             header="Time"
-                            body={problemBodyTemplate}
+                            body={timeBodyTemplate}
                             headerStyle={{ minWidth: "5rem" }}
                         ></Column>
                          <Column
-                            field="details"
+                            field="days"
                             header="Days"
-                            body={problemBodyTemplate}
+                            body={daysBodyTemplate}
                             headerStyle={{ minWidth: "5rem" }}
                         ></Column>
                         <Column
@@ -345,7 +334,7 @@ const Availability_Manage = () => {
                                     name='chamber'
                                     onChange={(e) => onChamberChange(e)}
                                     options={chamberList}
-                                    optionLabel="value"
+                                    optionLabel="label"
                                     showClear
                                     placeholder="Select a Chamber"
                                     required
@@ -414,13 +403,12 @@ const Availability_Manage = () => {
                         
                         
                         <div className="field">
-                            <label htmlFor="serial">Add Serial Number</label>
+                            <label htmlFor="serial">Add Serial Range</label>
                             <InputText
                                 id="serial"
                                 value={product.serial}
                                 onChange={(e) => onInputChange(e, "serial")}
                                 required
-                                autoFocus
                                 className={classNames({
                                     "p-invalid": submitted && !product.serial,
                                 })}

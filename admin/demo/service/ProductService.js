@@ -59,6 +59,31 @@ export const ProductService = {
         return await fetch(`${baseUrl}/get-time`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
+    },
+
+
+    //AvailAbility Management
+
+    async postAvailable( chamber, time1, days, serial) {
+
+        const formData = new FormData();
+
+        formData.append('chamber', chamber);
+        formData.append('time1', time1);
+        formData.append('days', days);
+        formData.append('serial', serial);
+
+        const res = await axios.post(
+            `${baseUrl}/post-available`,
+            formData
+        )
+    },
+
+    async getAvailable() {
+        
+        return await fetch(`${baseUrl}/get-available`, { headers: { 'Cache-Control': 'no-cache' } })
+        .then((res) => res.json())
+        .then((d) => d.AllData);
     }
 
     

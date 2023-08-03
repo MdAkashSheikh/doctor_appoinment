@@ -7,6 +7,7 @@ const masterSc = require('./models/masterSc');
 const patientSc = require('./models/patientSc');
 const chamberSc = require('./models/chamberSc');
 const timeSc = require('./models/timeSc');
+const availabilitySc = require('./models/availabilitySc');
 
 
 const app = express();
@@ -178,6 +179,47 @@ app.get('/get-time', async(req, res) => {
         console.log(err);
     }
 })
+
+
+//For Availability Management 
+
+app.post('/post-available', async(req, res) => {
+    console.log(req.body);
+
+    const chamber = req.body.chamber;
+    const time1 = req.body.time1;
+    const days = req.body.days;
+    const serial = req.body.serial;
+
+    try {
+        
+        const availData = await availabilitySc.create({
+            "chamber": chamber,
+            "time1": time1,
+            "days": days,
+            "serial": serial,
+        })
+
+        res.send(req.body);
+        const newAvail = new availabilitySc(availData);
+        newAvail.save();
+
+    } catch (err) {
+        res.status(400).send(err);
+        console.log(err)
+    }
+})
+
+app.get('/get-available', async(req, res) => {
+    try {
+        const AllData = await availabilitySc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.send(err);
+    }
+})
+
 
 
 app.listen(5000, () => {
