@@ -13,7 +13,7 @@ import { ProductService } from '../../../demo/service/ProductService';
 const Chamber_Manage = () => {
     let emptyProduct = {
         id: 0,
-        // chamber: '',
+        chamber: '',
     };
 
     const [products, setProducts] = useState(null);
