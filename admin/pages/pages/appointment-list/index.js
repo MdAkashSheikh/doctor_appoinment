@@ -545,7 +545,6 @@ const Appointment = () => {
                                     showClear
                                     placeholder="Select a Chamber"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.specialist,
                                     })}
@@ -567,7 +566,6 @@ const Appointment = () => {
                                     showClear
                                     placeholder="Select a Doctor"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.doctor,
                                     })}
@@ -592,7 +590,6 @@ const Appointment = () => {
                                     showClear
                                     placeholder="Select a Chamber"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.specialist,
                                     })}
@@ -614,7 +611,6 @@ const Appointment = () => {
                                     showClear
                                     placeholder="Select a Time"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.time1,
                                     })}
@@ -635,7 +631,6 @@ const Appointment = () => {
                                     value={product.name}
                                     onChange={(e) => onInputChange(e, "name")}
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.name,
                                     })}
@@ -652,7 +647,6 @@ const Appointment = () => {
                                     id="age"
                                     value={product.age}
                                     onChange={(e) => onInputChange(e, "age")}
-                                    autoFocus
                                 />
                             </div>
                         </div>
@@ -668,8 +662,6 @@ const Appointment = () => {
                                     optionLabel="label"
                                     showClear
                                     placeholder="Select a Gender"
-                                    required
-                                    autoFocus
                                 />
                             </div>
                             <div className="field col">
@@ -678,7 +670,6 @@ const Appointment = () => {
                                     id="phone"
                                     value={product.phone}
                                     onChange={(e) => onInputChange(e, "phone")}
-                                    autoFocus
                                 />
                             </div>
                         </div>
@@ -703,7 +694,6 @@ const Appointment = () => {
                                 value={product.serial}
                                 onChange={(e) => onInputChange(e, "serial")}
                                 required
-                                autoFocus
                                 className={classNames({
                                     "p-invalid": submitted && !product.serial,
                                 })}

@@ -363,7 +363,6 @@ const Availability_Manage = () => {
                                     showClear
                                     placeholder="Select Time"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.time1,
                                     })}
@@ -387,8 +386,8 @@ const Availability_Manage = () => {
                                     optionLabel="label"
                                     showClear
                                     placeholder="Select Days"
+                                    selectionMode="multiple"
                                     required
-                                    autoFocus
                                     className={classNames({
                                         "p-invalid": submitted && !product.days,
                                     })}
