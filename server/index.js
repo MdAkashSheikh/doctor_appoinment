@@ -149,7 +149,7 @@ app.post('/post-time', async(req, res) => {
     
     console.log(req.body);
 
-    const st_time = req.body.s_time;
+    const st_time = req.body.st_time;
     const en_time = req.body.en_time;
 
     try {
@@ -158,9 +158,9 @@ app.post('/post-time', async(req, res) => {
             "en_time": en_time,
         })
 
-        res.send(req.body);
         const newTime = new timeSc(timeData);
-        newTime.save();
+        await newTime.save();
+        res.send(req.body);
 
     } catch (err) {
         res.status(404).send(err);
