@@ -31,7 +31,7 @@ const Chamber_Manage = () => {
 
     useEffect(() => {
         ProductService.getChamber().then((data) => setProducts(data));
-    }, []);
+    }, [toggleRefresh]);
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -80,6 +80,7 @@ const Chamber_Manage = () => {
     const deleteProduct = () => {
         ProductService.deleteChember(product._id).then(() => {
             setTogleRefresh(!toggleRefresh);
+            setDeleteProductDialog(false);
             setProduct(emptyProduct);
             toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Chamber is Deleted', life: 3000 });
         })
