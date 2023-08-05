@@ -101,23 +101,9 @@ const Availability_Manage = () => {
         setProduct(_product);
     };
 
-
-    const onChamberChange = (e) => {
+    const onSelectionChange = (e, name) => {
         let _product = {...product };
-        _product['chamber'] = e.value;
-        setProduct(_product);
-    }
-
-
-    const onTimeChange = (e) => {
-        let _product = {...product};
-        _product['time1'] = e.value;
-        setProduct(_product);
-    }
-
-    const onDayChange = (e) => {
-        let _product = {...product};
-        _product['days'] = e.value;
+        _product[`${name}`] = e.value;
         setProduct(_product);
     }
 
@@ -181,6 +167,15 @@ const Availability_Manage = () => {
             <>
                 <span className="p-column-title">Chamber</span>
                 {rowData.chamber}
+            </>
+        );
+    }
+
+    const serialBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Serial</span>
+                {rowData.serial}
             </>
         );
     }
@@ -309,6 +304,12 @@ const Availability_Manage = () => {
                             body={daysBodyTemplate}
                             headerStyle={{ minWidth: "5rem" }}
                         ></Column>
+                         <Column
+                            field="serial"
+                            header="Serial Range"
+                            body={serialBodyTemplate}
+                            headerStyle={{ minWidth: "5rem" }}
+                        ></Column>
                         <Column
                             header="Action"
                             body={actionBodyTemplate}
@@ -319,7 +320,7 @@ const Availability_Manage = () => {
                     <Dialog
                         visible={productDialog}
                         style={{ width: "450px" }}
-                        header="Patient Details"
+                        header="Add Availability Management"
                         modal
                         className="p-fluid"
                         footer={productDialogFooter}
@@ -332,7 +333,7 @@ const Availability_Manage = () => {
                                 <Dropdown
                                     value={product.chamber}
                                     name='chamber'
-                                    onChange={(e) => onChamberChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "chamber")}
                                     options={chamberList}
                                     optionLabel="label"
                                     showClear
@@ -357,7 +358,7 @@ const Availability_Manage = () => {
                                 <Dropdown
                                     value={product.time1}
                                     name='time1'
-                                    onChange={(e) => onTimeChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "time1")}
                                     options={timeList}
                                     optionLabel="label"
                                     showClear
@@ -381,7 +382,7 @@ const Availability_Manage = () => {
                                 <Dropdown
                                     value={product.days}
                                     name='days'
-                                    onChange={(e) => onDayChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "days")}
                                     options={daysList}
                                     optionLabel="label"
                                     showClear

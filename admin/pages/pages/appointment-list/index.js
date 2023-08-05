@@ -9,6 +9,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
+import { Calendar } from 'primereact/calendar';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
@@ -36,7 +37,6 @@ const Appointment = () => {
     const [products, setProducts] = useState(null);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-    const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
     const [product, setProduct] = useState(emptyProduct);
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
@@ -49,10 +49,6 @@ const Appointment = () => {
     useEffect(() => {
         ProductService.getProducts().then((data) => setProducts(data));
     }, []);
-
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -69,16 +65,12 @@ const Appointment = () => {
         setDeleteProductDialog(false);
     };
 
-    const hideDeleteProductsDialog = () => {
-        setDeleteProductsDialog(false);
-    };
-
     const saveProduct = () => {
         setSubmitted(true);
 
         console.log("PPPP1",product)
 
-        if(product.name && product.chamber && product.doctor && product.date1 && product.time1) {
+        if(product.name && product.chamber && product.doctor && product.date1 && product.time1 && product.serial) {
             ProductService.postPatient(
                 product.chamber,
                 product.specialist,
@@ -90,6 +82,7 @@ const Appointment = () => {
                 product.gender,
                 product.phone,
                 product.details,
+                product.serial,
             ).then(() => {
                 setTogleRefresh(!toggleRefresh);
                 setProductDialog(false);
@@ -102,26 +95,12 @@ const Appointment = () => {
         setProductDialog(true);
     };
 
-    const confirmDeleteProduct = (product) => {
-        setProduct(product);
-        setDeleteProductDialog(true);
-    };
-
     const deleteProduct = () => {
         let _products = products.filter((val) => val.id !== product.id);
         setProducts(_products);
         setDeleteProductDialog(false);
         setProduct(emptyProduct);
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    };
-
-
-    const createId = () => {
-        let id = 0;
-        for (let i = 0; i < products.length; i++) {
-            id=i+1;
-        }
-        return id;
     };
 
     const exportCSV = () => {
@@ -136,35 +115,9 @@ const Appointment = () => {
         setProduct(_product);
     };
 
-
-
-    const onChamberChange = (e) => {
+    const onSelectionChange = (e, name) => {
         let _product = {...product };
-        _product['chamber'] = e.value;
-        setProduct(_product);
-    }
-
-    const onDoctorChange = (e) => {
-        let _product = {...product};
-        _product['doctor'] = e.value;
-        setProduct(_product);
-    }
-
-    const onSpecialistChange = (e) => {
-        let _product = {...product};
-        _product['specialist'] = e.value;
-        setProduct(_product);
-    }
-
-    const onTimeChange = (e) => {
-        let _product = {...product};
-        _product['time1'] = e.value;
-        setProduct(_product);
-    }
-
-    const onGanderChange = (e) => {
-        let _product = {...product};
-        _product['gender'] = e.value;
+        _product[`${name}`] = e.value;
         setProduct(_product);
     }
 
@@ -228,7 +181,7 @@ const Appointment = () => {
         return (
             <>
                 <span className="p-column-title">Code</span>
-                {rowData.id}
+                {rowData.sl}
             </>
         );
     };
@@ -270,11 +223,11 @@ const Appointment = () => {
         );
     };
 
-    const serialNumberBodyTemplate = (rowData) => {
+    const serialBodyTemplate = (rowData) => {
         return (
             <>
                 <span className="p-column-title">Serial Number</span>
-                {rowData.serialNumber}
+                {rowData.serial}
             </>
         );
     }
@@ -295,6 +248,15 @@ const Appointment = () => {
                 {rowData.chamber}
             </>
         );
+    }
+
+    const dateBodyTemplete = () => {
+        return (
+            <>
+                <span className="p-column-title">Date</span>
+                {rowData.date1}
+            </>
+        )
     }
 
     const timeBodyTemplate = (rowData) => {
@@ -435,9 +397,9 @@ const Appointment = () => {
                             headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                         <Column
-                            field="serialNumber"
+                            field="serial"
                             header="Serial Number"
-                            body={serialNumberBodyTemplate}
+                            body={serialBodyTemplate}
                         ></Column>
                         <Column
                             field="name"
@@ -515,7 +477,7 @@ const Appointment = () => {
                                 <Dropdown
                                     value={product.chamber}
                                     name='chamber'
-                                    onChange={(e) => onChamberChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "chamber")}
                                     options={chamberList}
                                     optionLabel="value"
                                     showClear
@@ -539,11 +501,11 @@ const Appointment = () => {
                                 <Dropdown
                                     value={product.specialist}
                                     name='spcialist'
-                                    onChange={(e) => onSpecialistChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "specialist")}
                                     options={specialistList}
                                     optionLabel="label"
                                     showClear
-                                    placeholder="Select a Chamber"
+                                    placeholder="Select a Specialization"
                                     required
                                     className={classNames({
                                         "p-invalid": submitted && !product.specialist,
@@ -560,7 +522,7 @@ const Appointment = () => {
                                 <Dropdown
                                     value={product.doctor}
                                     name='doctor'
-                                    onChange={(e) => onDoctorChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "doctor")}
                                     options={doctorList}
                                     optionLabel="label"
                                     showClear
@@ -581,31 +543,29 @@ const Appointment = () => {
                         <div className="formgrid grid">
                             <div className="field col">
                                 <label htmlFor="date1">Date</label>
-                                <Dropdown
-                                    value={product.specialist}
-                                    name='spcialist'
-                                    onChange={(e) => onSpecialistChange(e)}
-                                    options={specialistList}
-                                    optionLabel="label"
-                                    showClear
-                                    placeholder="Select a Chamber"
+                                <Calendar 
+                                    value={product.date1}
+                                    name='date1' 
+                                    onChange={(e) => onSelectionChange(e, "date1")} 
+                                    dateFormat="dd/mm/yy" 
+                                    placeholder="Select a Date"
                                     required
                                     className={classNames({
-                                        "p-invalid": submitted && !product.specialist,
+                                        "p-invalid": submitted && !product.date1,
                                     })}
                                 />
-                                {submitted && !product.chamber && (
+                                {submitted && !product.date1 && (
                                     <small className="p-invalid">
-                                        Specialization is required.
+                                        Date is required.
                                     </small>
                                 )}
                             </div>
                             <div className="field col">
                                 <label htmlFor="time1">Time</label>
                                 <Dropdown
-                                    value={product.doctor}
+                                    value={product.time1}
                                     name='time1'
-                                    onChange={(e) => onTimeChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "time1")}
                                     options={timeList}
                                     optionLabel="label"
                                     showClear
@@ -657,7 +617,7 @@ const Appointment = () => {
                                 <Dropdown
                                     value={product.gender}
                                     name='gender'
-                                    onChange={(e) => onGanderChange(e)}
+                                    onChange={(e) => onSelectionChange(e, "gender")}
                                     options={genderList}
                                     optionLabel="label"
                                     showClear
@@ -675,12 +635,12 @@ const Appointment = () => {
                         </div>
 
                         <div className="field">
-                            <label htmlFor="description">Details</label>
+                            <label htmlFor="details">Details</label>
                             <InputTextarea
-                                id="description"
-                                value={product.description}
+                                id="details"
+                                value={product.details}
                                 onChange={(e) =>
-                                    onInputChange(e, "description")
+                                    onInputChange(e, "details")
                                 }
                                 required
                                 rows={3}
@@ -702,6 +662,17 @@ const Appointment = () => {
                                 <small className="p-invalid">
                                     Serial Number is required.
                                 </small>
+                            )}
+                        </div>
+                    </Dialog>
+
+                    <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+                        <div className="flex align-items-center justify-content-center">
+                            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                            {product && (
+                                <span>
+                                    Are you sure you want to delete <b>{product.name}</b>?
+                                </span>
                             )}
                         </div>
                     </Dialog>

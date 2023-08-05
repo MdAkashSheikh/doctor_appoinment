@@ -55,8 +55,6 @@ const Chamber_Manage = () => {
     const saveProduct = () => {
         setSubmitted(true);
 
-        console.log("PPPP1",product)
-
         if( product.chamber ) {
             ProductService.postChamber(
 
@@ -67,8 +65,6 @@ const Chamber_Manage = () => {
                 setProductDialog(false);
             })
         }
-
-        console.log('PPP2', product)
     };
 
     const editProduct = (product) => {
@@ -82,14 +78,12 @@ const Chamber_Manage = () => {
     };
 
     const deleteProduct = () => {
-        let _products = products.filter((val) => val.id !== product.id);
-        setProducts(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Time Deleted', life: 3000 });
+        ProductService.deleteChember(product._id).then(() => {
+            setTogleRefresh(!toggleRefresh);
+            setProduct(emptyProduct);
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Chamber is Deleted', life: 3000 });
+        })
     };
-
-
 
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
@@ -146,7 +140,7 @@ const Chamber_Manage = () => {
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <Button
-                    label="Add Time"
+                    label="Add Chamber"
                     icon="pi pi-plus"
                     severity="sucess"
                     className="mr-2"
@@ -193,9 +187,6 @@ const Chamber_Manage = () => {
             </div>
         )
     }
-   
-    
-    console.log('PPP3', product);
 
 
     return (

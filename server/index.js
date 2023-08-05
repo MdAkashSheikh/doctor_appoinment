@@ -109,7 +109,6 @@ app.get('/get-data', async(req, res) => {
 })
 
 
-
 //For Master Chamber
 
 app.post('/post-chamber', async(req, res) => {
@@ -142,6 +141,19 @@ app.get('/get-chamber', async(req, res) => {
         console.log(err);
     }
 })
+
+app.delete('/delete-chamber/:userId', async(req, res) => {
+    const id = req.params.userId;
+
+    try {
+        await chamberSc.findByIdAndRemove(id);
+        res.send('Deleted');
+    } catch (err) {
+        res.send(err);
+    }
+})
+
+
 
 
 //For Master Time Management

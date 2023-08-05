@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-
+//localhost
+//home: 192.168.1.101
+//office: 192.168.0.110
+// '/demo/data/products.json'
 
 const baseUrl = '//localhost:5000';
 
-// '/demo/data/products.json'
+
 export const ProductService = {
 
 
@@ -44,12 +47,13 @@ export const ProductService = {
 
     async postChamber(chamber) {
         
-        const formData = new FormData();
-        formData.append('chamber', chamber);
+        const data = {
+            chamber
+        }
         
         const res = await axios.post(
             `${baseUrl}/post-chamber`,
-            formData
+            data
         )
     },
 
@@ -57,6 +61,12 @@ export const ProductService = {
         return fetch(`${baseUrl}/get-chamber`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
+    },
+
+    async deleteChember(id) {
+        await fetch(`${baseUrl}/delete-chamber/` + id, {
+            method: "DELETE"
+        })
     },
 
     
