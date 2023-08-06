@@ -263,7 +263,7 @@ const Doctor_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="Not Available Chamber-Management item in Here."
+                        emptyMessage="Not Available Doctor Management item in Here."
                         header={header}
                         responsiveLayout="scroll"
                     >
