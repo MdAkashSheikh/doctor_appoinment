@@ -26,7 +26,7 @@ export const ProductService = {
             phone,
             details,
             serial,
-            status: 'Not Update'
+            status: 'Updated'
         }
 
         const res = await axios.post(
@@ -125,7 +125,38 @@ export const ProductService = {
         await fetch(`${baseUrl}/delete-available/` + id, {
             method: "DELETE"
         })
-    }
+    },
+
+
+    //Doctor Management
+
+    async postDoctor( name, specialist, designation, degree, experience) {
+        const data = {
+            name,
+            specialist,
+            designation,
+            degree,
+            experience,
+        }
+
+        const res = await axios.post(
+            `${baseUrl}/post-doctor`,
+            data
+        )
+    },
+
+    getDoctor() {
+        
+        return fetch(`${baseUrl}/get-doctor`, { headers: { 'Cache-Control': 'no-cache' } })
+        .then((res) => res.json())
+        .then((d) => d.AllData);
+    },
+
+    async deleteDoctor(id) {
+        await fetch(`${baseUrl}/delete-doctor/` + id, {
+            method: "DELETE"
+        })
+    },
 
     
 };

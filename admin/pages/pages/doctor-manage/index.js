@@ -11,16 +11,17 @@ import { classNames } from 'primereact/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
-const Availability_Manage = () => {
+const Doctor_Manage = () => {
     let emptyProduct = {
-        chamber: "",
-        time1: "",
-        days: "",
-        serial: "",
+        id: 0,
+        name: '',
+        specialist: '',
+        designation: '',
+        degree: '',
+        experience: '',
     };
 
     const [products, setProducts] = useState(null);
-    const [mChamber, setMChember] = useState(null);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
@@ -34,8 +35,7 @@ const Availability_Manage = () => {
 
 
     useEffect(() => {
-        ProductService.getAvailable().then((data) => setProducts(data));
-        ProductService.getChamber().then((ch) => setMChember(ch));
+        ProductService.getDoctor().then((data) => setProducts(data));
     }, [toggleRefresh]);
 
     const openNew = () => {
@@ -60,14 +60,14 @@ const Availability_Manage = () => {
     const saveProduct = () => {
         setSubmitted(true);
 
-        console.log("PPPP1",product)
+        if( product.name && product.specialist &&  product.degree && product.designation) {
+            ProductService.postDoctor(
+                product.name,
+                product.specialist,
+                product.degree,
+                product.designation,
+                product.experience
 
-        if( product.chamber && product.time1 && product.days && product.serial) {
-            ProductService.postAvailable(
-                product.chamber,
-                product.time1,
-                product.days,
-                product.serial,
             ).then(() => {
                 setTogleRefresh(!toggleRefresh);
                 setProductDialog(false);
@@ -86,15 +86,13 @@ const Availability_Manage = () => {
     };
 
     const deleteProduct = () => {
-        ProductService.deleteAvailable(product._id).then(() => {
+        ProductService.deleteChember(product._id).then(() => {
             setTogleRefresh(!toggleRefresh);
             setDeleteProductDialog(false);
             setProduct(emptyProduct);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Availability is Deleted', life: 3000 });
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Chamber is Deleted', life: 3000 });
         })
     };
-
-
 
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
@@ -110,39 +108,13 @@ const Availability_Manage = () => {
         setProduct(_product);
     }
 
-    // const chamberList = [
-    //     mChamber.chamber.map((item) => {
-    //         console.log(item)
-    //          return  {  label: item,    value: item }
-    //      })
-    // ];
-    
-    // { label: 'Chamber-A', value: 'Chamber-A' },
-    // { label: 'Chamber-B', value: 'Chamber-B' },
-    // { label: 'Chamber-C', value: 'Chamber-C' },
-    const chamberList = mChamber?.chamber?.map((item) => {
-        console.log("HHHHH",item)
-        return {  label: item,    value: item }
-     })
-
-    const timeList = [
-        { label: '09:00AM-12:00PM', value: '9-12' },
-        { label: '02:00PM-05:00PM', value: '2-5' },
-        { label: '05:00PM-08:00PM', value: '5-8' },
+    const specialistList = [
+        { label: 'Gynecologists', value: 'Gynecologists' },
+        { label: 'Ophthalmologists', value: 'Ophthalmologists' },
+        { label: 'Cardiologists', value: 'Cardiologists' },
+        { label: 'Gastroenterologists', value: 'Gastroenterologists' },
+        { label: 'Orthopedic surgeons', value: 'Orthopedic surgeons' },
     ];
-    
-
-    const daysList = [
-        { label: 'Saturday', value: 'Saturday'},
-        { label: 'Sunday', value: 'Sunday'},
-        { label: 'Monday', value: 'Monday'},
-        { label: 'Tuesday', value: 'Tuesday'},
-        { label: 'Wednesday', value: 'Wednesday'},
-        { label: 'Thursday', value: 'Thursday'},
-        { label: 'Friday', value: 'Friday'},
-    ]
-
-
 
     const codeBodyTemplate = (rowData) => {
         return (
@@ -153,41 +125,47 @@ const Availability_Manage = () => {
         );
     };
 
-
-    const timeBodyTemplate = (rowData) => {
+    const nameBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Time</span>
-                {rowData.time1}
+                <span className="p-column-title">Doctor Name</span>
+                {rowData.name}
             </>
         );
     }
 
-    const daysBodyTemplate = (rowData) => {
+    const specialistBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Days</span>
-                {rowData.days}
+                <span className="p-column-title">Specialization</span>
+                {rowData.specialist}
             </>
         );
     }
 
-    
-
-    const chamberBodyTemplate = (rowData) => {
+    const designationBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Chamber</span>
-                {rowData.chamber}
+                <span className="p-column-title">Designation</span>
+                {rowData.designation}
             </>
         );
     }
 
-    const serialBodyTemplate = (rowData) => {
+    const degreeBodyTemplate = (rowData) => {
         return (
             <>
-                <span className="p-column-title">Serial</span>
-                {rowData.serial}
+                <span className="p-column-title">Degree</span>
+                {rowData.degree}
+            </>
+        );
+    }
+
+    const experienceBodyTemplate = (rowData) => {
+        return (
+            <>
+                <span className="p-column-title">Experience</span>
+                {rowData.experience}
             </>
         );
     }
@@ -200,13 +178,12 @@ const Availability_Manage = () => {
             </>
         );
     };
-
         
     const topHeader = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <h2 className="m-0">Availability Management</h2>
+                    <h2 className="m-0">Doctor Management</h2>
                 </div>
             </React.Fragment>
         );
@@ -215,7 +192,7 @@ const Availability_Manage = () => {
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <Button
-                    label="Add Availability"
+                    label="Add Doctor"
                     icon="pi pi-plus"
                     severity="sucess"
                     className="mr-2"
@@ -241,34 +218,28 @@ const Availability_Manage = () => {
         </>
     );
 
-    if(mChamber == null) {
-        <h1>Loading.....</h1>
-    }
-
     if(products == null) {
         return (
             <div className="card">
-            <div className="border-round border-1 surface-border p-4 surface-card">
-                <div className="flex mb-3">
-                    <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
-                    <div>
-                        <Skeleton width="10rem" className="mb-2"></Skeleton>
-                        <Skeleton width="5rem" className="mb-2"></Skeleton>
-                        <Skeleton height=".5rem"></Skeleton>
+                <div className="border-round border-1 surface-border p-4 surface-card">
+                    <div className="flex mb-3">
+                        <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                        <div>
+                            <Skeleton width="10rem" className="mb-2"></Skeleton>
+                            <Skeleton width="5rem" className="mb-2"></Skeleton>
+                            <Skeleton height=".5rem"></Skeleton>
+                        </div>
+                    </div>
+                    <Skeleton width="100%" height="500px"></Skeleton>
+                    <div className="flex justify-content-between mt-3">
+                        <Skeleton width="4rem" height="2rem"></Skeleton>
+                        <Skeleton width="4rem" height="2rem"></Skeleton>
                     </div>
                 </div>
-                <Skeleton width="100%" height="500px"></Skeleton>
-                <div className="flex justify-content-between mt-3">
-                    <Skeleton width="4rem" height="2rem"></Skeleton>
-                    <Skeleton width="4rem" height="2rem"></Skeleton>
-                </div>
             </div>
-        </div>
         )
     }
 
-    console.log("Chamber", mChamber);
-   
 
     return (
         <div className="grid crud-demo">
@@ -292,7 +263,7 @@ const Availability_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="Not Available Availability-Management item in Here."
+                        emptyMessage="Not Available Chamber-Management item in Here."
                         header={header}
                         responsiveLayout="scroll"
                     >
@@ -303,139 +274,122 @@ const Availability_Manage = () => {
                             body={codeBodyTemplate}
                             sortable
                         ></Column>
-                        <Column
-                            field="chamber"
-                            header="Chamber"
-                            sortable
-                            body={chamberBodyTemplate}
-                            headerStyle={{ minWidth: "10rem" }}
-                        ></Column>
-                        <Column
-                            field="time1"
-                            header="Time"
-                            body={timeBodyTemplate}
-                            headerStyle={{ minWidth: "5rem" }}
-                        ></Column>
                          <Column
-                            field="days"
-                            header="Days"
-                            body={daysBodyTemplate}
-                            headerStyle={{ minWidth: "5rem" }}
+                            field="name"
+                            header="Doctor Name"
+                            body={nameBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
+                        ></Column> 
+                        <Column
+                            field="specialist"
+                            header="Specialization"
+                            body={specialistBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
+                        ></Column> 
+                        <Column
+                            field="designation"
+                            header="Designation"
+                            body={designationBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
+                        ></Column> 
+                        <Column
+                            field="degree"
+                            header="Degree"
+                            body={degreeBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
                         ></Column>
-                         <Column
-                            field="serial"
-                            header="Serial Range"
-                            body={serialBodyTemplate}
-                            headerStyle={{ minWidth: "5rem" }}
+                        <Column
+                            field="experience"
+                            header="Experience"
+                            body={experienceBodyTemplate}
+                            headerStyle={{ minWidth: "15rem" }}
                         ></Column>
                         <Column
                             header="Action"
                             body={actionBodyTemplate}
-                            headerStyle={{ minWidth: "2rem" }}
+                            headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                     </DataTable>
 
                     <Dialog
                         visible={productDialog}
                         style={{ width: "450px" }}
-                        header="Add Availability Management"
+                        header="Add New Doctor"
                         modal
                         className="p-fluid"
                         footer={productDialogFooter}
                         onHide={hideDialog}
                     >
-                
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="chamber">Chamber</label>
-                                <Dropdown
-                                    value={product.chamber}
-                                    name='chamber'
-                                    onChange={(e) => onSelectionChange(e, "chamber")}
-                                    options={chamberList}
-                                    optionLabel="label"
-                                    showClear
-                                    placeholder="Select a Chamber"
-                                    required
-                                    autoFocus
-                                    className={classNames({
-                                        "p-invalid": submitted && !product.chamber,
-                                    })}
-                                />
-                                </div>
-                                {submitted && !product.chamber && (
-                                    <small className="p-invalid">
-                                        Chamber is required.
-                                    </small>
-                                )}
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="time1">Time</label>
-                                <Dropdown
-                                    value={product.time1}
-                                    name='time1'
-                                    onChange={(e) => onSelectionChange(e, "time1")}
-                                    options={timeList}
-                                    optionLabel="label"
-                                    showClear
-                                    placeholder="Select Time"
-                                    required
-                                    className={classNames({
-                                        "p-invalid": submitted && !product.time1,
-                                    })}
-                                />
-                                </div>
-                                {submitted && !product.time1 && (
-                                    <small className="p-invalid">
-                                        Time is required.
-                                    </small>
-                                )}
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="days">Days</label>
-                                <Dropdown
-                                    value={product.days}
-                                    name='days'
-                                    onChange={(e) => onSelectionChange(e, "days")}
-                                    options={daysList}
-                                    optionLabel="label"
-                                    showClear
-                                    placeholder="Select Days"
-                                    selectionMode="multiple"
-                                    required
-                                    className={classNames({
-                                        "p-invalid": submitted && !product.days,
-                                    })}
-                                />
-                                </div>
-                                {submitted && !product.days && (
-                                    <small className="p-invalid">
-                                        Day is required.
-                                    </small>
-                                )}
-                        </div>
-                        
-                        
                         <div className="field">
-                            <label htmlFor="serial">Add Serial Range</label>
-                            <InputText
-                                id="serial"
-                                value={product.serial}
-                                onChange={(e) => onInputChange(e, "serial")}
-                                required
-                                className={classNames({
-                                    "p-invalid": submitted && !product.serial,
-                                })}
-                            />
-                            {submitted && !product.serial && (
-                                <small className="p-invalid">
-                                    Serial Range is required.
-                                </small>
-                            )}
+                            <label htmlFor="name">Doctor Name</label>
+                            <InputText 
+                                id="name" 
+                                value={product.name} 
+                                onChange={(e) => onInputChange(e, "name")} 
+                                required 
+                                autoFocus
+                                className={classNames({ 'p-invalid': submitted && !product.name })} 
+                                />
+                            {submitted && !product.name && <small className="p-invalid">
+                                Doctor Name is required.
+                            </small>}
+                        </div>
+                        <div className="formgrid grid">
+                            <div className="field col">
+                                <label htmlFor="specialist">Specialization</label>
+                                <Dropdown
+                                    value={product.specialist}
+                                    name='chamber'
+                                    onChange={(e) => onSelectionChange(e, "specialist")}
+                                    options={specialistList}
+                                    optionLabel="label"
+                                    showClear
+                                    placeholder="Select a Specialization"
+                                    required
+                                    className={classNames({
+                                        "p-invalid": submitted && !product.specialist,
+                                    })}
+                                />
+                                </div>
+                                {submitted && !product.specialist && (
+                                    <small className="p-invalid">
+                                        Specialization is required.
+                                    </small>
+                                )}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="designation">Designation</label>
+                            <InputText 
+                                id="designation" 
+                                value={product.designation} 
+                                onChange={(e) => onInputChange(e, "designation")} 
+                                required 
+                                className={classNames({ 'p-invalid': submitted && !product.designation })} 
+                                />
+                            {submitted && !product.designation && <small className="p-invalid">
+                                Designation is required.
+                            </small>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="degree">Degree</label>
+                            <InputText 
+                                id="degree" 
+                                value={product.degree} 
+                                onChange={(e) => onInputChange(e, "degree")} 
+                                required 
+                                className={classNames({ 'p-invalid': submitted && !product.degree })} 
+                                />
+                            {submitted && !product.degree && <small className="p-invalid">
+                                Degree is required.
+                            </small>}
+                        </div>
+                        <div className="field">
+                            <label htmlFor="experience">Experience</label>
+                            <InputText 
+                                id="experience" 
+                                value={product.experience} 
+                                onChange={(e) => onInputChange(e, "experience")} 
+                                />
                         </div>
                     </Dialog>
 
@@ -456,4 +410,4 @@ const Availability_Manage = () => {
     );
 };
 
-export default  Availability_Manage;
+export default  Doctor_Manage;

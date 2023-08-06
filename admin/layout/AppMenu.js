@@ -20,6 +20,15 @@ const AppMenu = () => {
                     to: "/pages/appointment-list",
                 },
                 {
+                    label: "Doctor Management",
+                    icon: "pi pi-fw pi-bookmark",
+                    to: '/pages/doctor-manage'
+                },
+                {
+                    label: "Specialization Management",
+                    icon: "pi pi-fw pi-bookmark",
+                },
+                {
                     label: "Time Management",
                     icon: "pi pi-fw pi-bookmark",
                     to: '/pages/time-manage'

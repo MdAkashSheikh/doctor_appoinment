@@ -94,7 +94,6 @@ const Chamber_Manage = () => {
         setProduct(_product);
     };
 
-
     const codeBodyTemplate = (rowData) => {
         return (
             <>
@@ -103,8 +102,6 @@ const Chamber_Manage = () => {
             </>
         );
     };
-
-
 
     const chamberBodyTemplate = (rowData) => {
         return (
@@ -115,9 +112,6 @@ const Chamber_Manage = () => {
         );
     }
 
-
-
-
     const actionBodyTemplate = (rowData) => {
         return (
             <>
@@ -126,7 +120,6 @@ const Chamber_Manage = () => {
             </>
         );
     };
-
         
     const topHeader = () => {
         return (

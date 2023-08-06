@@ -8,6 +8,7 @@ const patientSc = require('./models/patientSc');
 const chamberSc = require('./models/chamberSc');
 const timeSc = require('./models/timeSc');
 const availabilitySc = require('./models/availabilitySc');
+const doctorSc = require('./models/doctorSc');
 
 
 const app = express();
@@ -103,6 +104,17 @@ app.get('/get-data', async(req, res) => {
         const AllData = await patientSc.find({}).sort('-date');
         res.send({AllData});
 
+    } catch (err) {
+        res.send(err);
+    }
+})
+
+app.put('/put-patient/:userId', async(req, res) => {
+    const id = req.params.userId;
+
+    try {
+        await patientSc.findByIdAndUpdate(id);
+        res.send('Updated');
     } catch (err) {
         res.send(err);
     }
@@ -251,6 +263,56 @@ app.delete('/delete-available/:userId', async(req, res) => {
     }
 })
 
+
+//For Doctor Management
+
+app.post('/post-doctor', async(req, res) => {
+    console.log(req.body);
+
+    const name = req.body.name;
+    const specialist = req.body.specialist;
+    const designation = req.body.designation;
+    const degree = req.body.degree;
+    const experience = req.body.experince;
+
+    try {
+        const doctorData = new doctorSc.create({
+            "name": name,
+            "specialist": specialist,
+            "designation": designation,
+            "degree": degree,
+            "experience": experience,
+        })
+
+        res.send(req.body);
+        const newDoctor = new doctorSc(doctorData);
+        newDoctor.save();
+
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+app.get('/get-doctor', async(req, res) => {
+    try {
+        const AllData = await doctorSc.find({}).sort('-date');
+        res.send({AllData});
+
+    } catch (err) {
+        res.send(err);
+    }
+})
+
+app.delete('/delete-doctor/:userId', async(req, res) => {
+    const id = req.params.userId;
+
+    try {
+        await doctorSc.findByIdAndRemove(id);
+        res.send('Deleted');
+    } catch (err) {
+        res.send(err);
+    }
+})
 
 
 app.listen(5000, () => {
