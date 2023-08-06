@@ -32,7 +32,7 @@ const Time_Manage = () => {
 
     useEffect(() => {
         ProductService.getTime().then((data) => setProducts(data));
-    }, []);
+    }, [toggleRefresh]);
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -80,11 +80,12 @@ const Time_Manage = () => {
     };
 
     const deleteProduct = () => {
-        let _products = products.filter((val) => val.id !== product.id);
-        setProducts(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Time Deleted', life: 3000 });
+        ProductService.deleteTime(product._id).then(() => {
+            setTogleRefresh(!toggleRefresh);
+            setDeleteProductDialog(false);
+            setProduct(emptyProduct);
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Time is Deleted', life: 3000 });
+        })
     };
 
 
@@ -96,50 +97,6 @@ const Time_Manage = () => {
 
         setProduct(_product);
     };
-
-
-    const onChamberChange = (e) => {
-        let _product = {...product };
-        _product['chamber'] = e.value;
-        setProduct(_product);
-    }
-
-
-    const onTimeChange = (e) => {
-        let _product = {...product};
-        _product['time1'] = e.value;
-        setProduct(_product);
-    }
-
-    const onDayChange = (e) => {
-        let _product = {...product};
-        _product['days'] = e.value;
-        setProduct(_product);
-    }
-
-    const chamberList = [
-        { label: 'Chamber-A', value: 'Chamber-A' },
-        { label: 'Chamber-B', value: 'Chamber-B' },
-        { label: 'Chamber-C', value: 'Chamber-C' },
-    ];
-
-    const timeList = [
-        { label: '09:00AM-12:00PM', value: '9-12' },
-        { label: '02:00PM-05:00PM', value: '2-5' },
-        { label: '05:00PM-08:00PM', value: '5-8' },
-    ];
-    
-
-    const daysList = [
-        { label: 'Saturday', value: 'Saturday'},
-        { label: 'Sunday', value: 'Sunday'},
-        { label: 'Monday', value: 'Monday'},
-        { label: 'Tuesday', value: 'Tuesday'},
-        { label: 'Wednesday', value: 'Wednesday'},
-        { label: 'Thursday', value: 'Thursday'},
-        { label: 'Friday', value: 'Friday'},
-    ]
-
 
 
     const codeBodyTemplate = (rowData) => {
@@ -269,7 +226,7 @@ const Time_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="Not found."
+                        emptyMessage="Not Available Time-Management item in Here."
                         header={header}
                         responsiveLayout="scroll"
                     >

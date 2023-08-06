@@ -2,10 +2,10 @@ import axios from 'axios';
 
 //localhost
 //home: 192.168.1.101
-//office: 192.168.0.110
+//office: 192.168.0.113
 // '/demo/data/products.json'
 
-const baseUrl = '//localhost:5000';
+const baseUrl = '//192.168.0.113:5000';
 
 
 export const ProductService = {
@@ -91,6 +91,11 @@ export const ProductService = {
         .then((d) => d.AllData);
     },
 
+    async deleteTime(id) {
+        await fetch(`${baseUrl}/delete-time/` + id, {
+            method: "DELETE"
+        })
+    },
 
     //AvailAbility Management
 
@@ -114,6 +119,12 @@ export const ProductService = {
         return fetch(`${baseUrl}/get-available`, { headers: { 'Cache-Control': 'no-cache' } })
         .then((res) => res.json())
         .then((d) => d.AllData);
+    },
+
+    async deleteAvailable(id) {
+        await fetch(`${baseUrl}/delete-available/` + id, {
+            method: "DELETE"
+        })
     }
 
     

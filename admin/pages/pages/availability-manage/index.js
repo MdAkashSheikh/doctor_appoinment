@@ -34,7 +34,7 @@ const Availability_Manage = () => {
 
     useEffect(() => {
         ProductService.getAvailable().then((data) => setProducts(data));
-    }, []);
+    }, [toggleRefresh]);
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -84,11 +84,12 @@ const Availability_Manage = () => {
     };
 
     const deleteProduct = () => {
-        let _products = products.filter((val) => val.id !== product.id);
-        setProducts(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+        ProductService.deleteAvailable(product._id).then(() => {
+            setTogleRefresh(!toggleRefresh);
+            setDeleteProductDialog(false);
+            setProduct(emptyProduct);
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Availability is Deleted', life: 3000 });
+        })
     };
 
 
@@ -274,7 +275,7 @@ const Availability_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="Not found."
+                        emptyMessage="Not Available Availability-Management item in Here."
                         header={header}
                         responsiveLayout="scroll"
                     >

@@ -212,7 +212,7 @@ const Chamber_Manage = () => {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
                         globalFilter={globalFilter}
-                        emptyMessage="Not found."
+                        emptyMessage="Not Available Chamber-Management item in Here."
                         header={header}
                         responsiveLayout="scroll"
                     >

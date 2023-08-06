@@ -1,4 +1,5 @@
 import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
@@ -9,7 +10,6 @@ import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
-import { Calendar } from 'primereact/calendar';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductService } from '../../../demo/service/ProductService';
 
@@ -48,7 +48,7 @@ const Appointment = () => {
 
     useEffect(() => {
         ProductService.getProducts().then((data) => setProducts(data));
-    }, []);
+    }, [toggleRefresh]);
 
     const openNew = () => {
         setProduct(emptyProduct);

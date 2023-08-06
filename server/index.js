@@ -67,6 +67,7 @@ app.post('/client-data', async(req, res) => {
     const phone = req.body.phone;
     const details = req.body.details;
     const status = req.body.status;
+    const serial = req.body.serial;
 
     try {
         
@@ -82,6 +83,7 @@ app.post('/client-data', async(req, res) => {
             "phone": phone,
             "details": details,
             "status": status,
+            "serial": serial,
         })
 
         res.send(req.body);
@@ -94,8 +96,6 @@ app.post('/client-data', async(req, res) => {
     }
 
 })
-
-
 
 app.get('/get-data', async(req, res) => {
     
@@ -153,9 +153,6 @@ app.delete('/delete-chamber/:userId', async(req, res) => {
     }
 })
 
-
-
-
 //For Master Time Management
 app.post('/post-time', async(req, res) => {
     
@@ -189,6 +186,17 @@ app.get('/get-time', async(req, res) => {
     } catch (err) {
         res.status(404).send(err);
         console.log(err);
+    }
+})
+
+app.delete('/delete-time/:userId', async(req, res) => {
+    const id = req.params.userId;
+
+    try {
+        await timeSc.findByIdAndRemove(id);
+        res.send('Deleted');
+    } catch (err) {
+        res.send(err);
     }
 })
 
@@ -227,6 +235,17 @@ app.get('/get-available', async(req, res) => {
         const AllData = await availabilitySc.find({}).sort('-date');
         res.send({AllData});
 
+    } catch (err) {
+        res.send(err);
+    }
+})
+
+app.delete('/delete-available/:userId', async(req, res) => {
+    const id = req.params.userId;
+
+    try {
+        await availabilitySc.findByIdAndRemove(id);
+        res.send('Deleted');
     } catch (err) {
         res.send(err);
     }
